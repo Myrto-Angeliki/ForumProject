@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/ForumProject.Api/ForumProject.Api.csproj" />
     <Project Path="src/ForumProject.Application/ForumProject.Application.csproj" />
+    <Project Path="src/ForumProject.Domain/ForumProject.Domain.csproj" />
     <Project Path="src/ForumProject.Infrastructure/ForumProject.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/tests/">
