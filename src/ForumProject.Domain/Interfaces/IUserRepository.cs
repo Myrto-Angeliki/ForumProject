@@ -5,9 +5,9 @@ namespace ForumProject.Domain.Interfaces
     public interface IUserRepository : IDisposable
     {
         Task<IEnumerable<User>> GetUsersAsync();
-        Task<User> GetUserByIdAsync(int userId);
-        Task<User> GetUserByEmailAsync(string userEmail);
-        Task<User> GetUserByUsernameAsync(string userName);
+        Task<User?> GetUserByIdAsync(int userId);
+        Task<User?> GetUserByEmailAsync(string userEmail);
+        Task<User?> GetUserByUsernameAsync(string userName);
         Task AddUserAsync(User user);
         Task UpdateUserAsync(User user);
         Task DeleteUserAsync(User user);

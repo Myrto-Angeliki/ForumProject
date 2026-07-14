@@ -7,7 +7,7 @@ namespace ForumProject.Domain.Interfaces
         Task<IEnumerable<Comment>> GetCommentsAsync();
         Task<IEnumerable<Comment>> GetCommentsByUserIdAsync(int userId);
         Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(int postId);
-        Task<Comment> GetCommentByIdAsync(int commentId);
+        Task<Comment?> GetCommentByIdAsync(int commentId);
         Task AddCommentAsync(Comment comment);
         Task UpdateCommentAsync(Comment comment);
         Task DeleteCommentAsync(Comment comment);
