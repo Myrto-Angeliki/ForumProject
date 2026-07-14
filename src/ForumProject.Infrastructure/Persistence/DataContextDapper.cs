@@ -13,7 +13,7 @@ namespace ForumProject.Infrastructure.Persistence
         }
 
         public IDbConnection CreateConnection()
-            => CreateConnection();
+            => new SqlConnection(_connectionString);
 
         public IEnumerable<T> LoadData<T>(string sql)
         {
