@@ -1,4 +1,4 @@
-namespace ForumProject.Domain
+namespace ForumProject.Domain.Entities
 {
     public class Post
     {

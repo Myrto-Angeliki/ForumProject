@@ -1,4 +1,4 @@
-namespace ForumProject.Domain
+namespace ForumProject.Domain.Entities
 {
     public class User
     {
@@ -27,9 +27,19 @@ namespace ForumProject.Domain
             Posts.Add(post);
         }
 
+        public void RemovePost(Post post)
+        {
+            Posts.Remove(post);
+        }
+
         public void AddComment(Comment comment)
         {
             Comments.Add(comment);
+        }
+
+        public void RemoveComment(Comment comment)
+        {
+            Comments.Remove(comment);
         }
 
         public void AddFriend(User friendToAdd)
@@ -37,9 +47,19 @@ namespace ForumProject.Domain
             Friends.Add(friendToAdd);
         }
 
+        public void RemoveFriend(User friendToRemove)
+        {
+            Friends.Remove(friendToRemove);
+        }
+
         public void AddTopic(Topic topicToFollow)
         {
             FollowingTopics.Add(topicToFollow);
+        }
+
+        public void RemoveTopic(Topic topicToUnfollow)
+        {
+            FollowingTopics.Remove(topicToUnfollow);
         }
         
         public void AddFriendRequest(User recipient)
