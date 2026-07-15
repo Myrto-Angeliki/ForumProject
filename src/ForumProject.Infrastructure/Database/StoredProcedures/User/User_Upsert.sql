@@ -14,7 +14,6 @@ BEGIN
         IF NOT EXISTS (SELECT * FROM ForumAppSchema.Users WHERE Email = @Email) AND
             NOT EXISTS (SELECT * FROM ForumAppSchema.Users WHERE Username = @Username)
         BEGIN
-            DECLARE @OutputUserId INT
 
             INSERT INTO ForumAppSchema.Users (
                 [Username],
@@ -25,7 +24,7 @@ BEGIN
             ) VALUES (
                 @Username,
                 @Email,
-                @IsActive,
+                1,
                 SYSUTCDATETIME(),
                 SYSUTCDATETIME()
             )
