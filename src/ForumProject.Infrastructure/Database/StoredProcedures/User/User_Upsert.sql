@@ -2,7 +2,7 @@ USE ForumDatabase;
 GO
 
 CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_Upsert
-    @Username NVARCHAR(50),
+    @Username NVARCHAR(50) = NULL,
     @Email NVARCHAR(50),
     @IsActive BIT = 1,
     @DeactivatedAt DATETIME2 = NULL,
