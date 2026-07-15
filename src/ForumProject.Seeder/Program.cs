@@ -1,15 +1,15 @@
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using ForumProject.Infrastructure.Persistence;
 using Dapper;
 
-namespace ForumProject.Infrastructure.Database.Seed
+namespace ForumProject.Infrastructure.Database.SeedSQL
 {
-    public class SQLSeed
+    public class Program
     {
         public static void Main(string[] args)
         {
             IConfiguration config = new ConfigurationBuilder()
-                    .AddJsonFile("src\\ForumProject.Api\\appsettings.json")
+                    .AddJsonFile("C:\\Users\\user\\source\\repos\\ForumProject\\src\\ForumProject.Api\\appsettings.json")
                     .Build();
 
             var connectionString = config.GetConnectionString("DefaultConnection")

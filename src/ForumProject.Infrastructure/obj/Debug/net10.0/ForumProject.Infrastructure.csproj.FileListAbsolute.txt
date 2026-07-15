@@ -1,0 +1,17 @@
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\obj\Debug\net10.0\ForumProject.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\obj\Debug\net10.0\ForumProject.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\obj\Debug\net10.0\ForumProject.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\obj\Debug\net10.0\ForumProject.Infrastructure.AssemblyInfo.cs
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\obj\Debug\net10.0\ForumProject.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\bin\Debug\net10.0\ForumProject.Infrastructure.deps.json
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\bin\Debug\net10.0\ForumProject.Infrastructure.dll
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\bin\Debug\net10.0\ForumProject.Infrastructure.pdb
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\bin\Debug\net10.0\ForumProject.Application.dll
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\bin\Debug\net10.0\ForumProject.Domain.dll
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\bin\Debug\net10.0\ForumProject.Application.pdb
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\bin\Debug\net10.0\ForumProject.Domain.pdb
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\obj\Debug\net10.0\ForumPro.6DA435D0.Up2Date
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\obj\Debug\net10.0\ForumProject.Infrastructure.dll
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\obj\Debug\net10.0\refint\ForumProject.Infrastructure.dll
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\obj\Debug\net10.0\ForumProject.Infrastructure.pdb
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Infrastructure\obj\Debug\net10.0\ref\ForumProject.Infrastructure.dll

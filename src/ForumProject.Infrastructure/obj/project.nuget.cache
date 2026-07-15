@@ -1,7 +1,7 @@
 {
   "version": 2,
-  "dgSpecHash": "j99eIB1zxAw=",
-  "success": false,
+  "dgSpecHash": "PXbF2iWI+7E=",
+  "success": true,
   "projectFilePath": "C:\\Users\\user\\source\\repos\\ForumProject\\src\\ForumProject.Infrastructure\\ForumProject.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\user\\.nuget\\packages\\dapper\\2.1.79\\dapper.2.1.79.nupkg.sha512",
@@ -12,7 +12,7 @@
     "C:\\Users\\user\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\6.0.2\\microsoft.data.sqlclient.sni.runtime.6.0.2.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\9.0.13\\microsoft.extensions.caching.abstractions.9.0.13.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.extensions.caching.memory\\9.0.13\\microsoft.extensions.caching.memory.9.0.13.nupkg.sha512",
-    "C:\\Users\\user\\.nuget\\packages\\microsoft.extensions.configuration\\10.0.9\\microsoft.extensions.configuration.10.0.9.nupkg.sha512",
+    "C:\\Users\\user\\.nuget\\packages\\microsoft.extensions.configuration\\10.0.10\\microsoft.extensions.configuration.10.0.10.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\10.0.10\\microsoft.extensions.configuration.abstractions.10.0.10.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.extensions.configuration.fileextensions\\10.0.10\\microsoft.extensions.configuration.fileextensions.10.0.10.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\microsoft.extensions.configuration.json\\10.0.10\\microsoft.extensions.configuration.json.10.0.10.nupkg.sha512",
@@ -37,17 +37,5 @@
     "C:\\Users\\user\\.nuget\\packages\\system.security.cryptography.pkcs\\9.0.13\\system.security.cryptography.pkcs.9.0.13.nupkg.sha512",
     "C:\\Users\\user\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.13\\system.security.cryptography.protecteddata.9.0.13.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1605",
-      "level": "Error",
-      "message": "Warning As Error: Detected package downgrade: Microsoft.Extensions.Configuration from 10.0.10 to 10.0.9. Reference the package directly from the project to select a different version. \r\n ForumProject.Infrastructure -> Microsoft.Extensions.Configuration.Json 10.0.10 -> Microsoft.Extensions.Configuration (>= 10.0.10) \r\n ForumProject.Infrastructure -> Microsoft.Extensions.Configuration (>= 10.0.9)",
-      "projectPath": "C:\\Users\\user\\source\\repos\\ForumProject\\src\\ForumProject.Infrastructure\\ForumProject.Infrastructure.csproj",
-      "filePath": "C:\\Users\\user\\source\\repos\\ForumProject\\src\\ForumProject.Infrastructure\\ForumProject.Infrastructure.csproj",
-      "libraryId": "Microsoft.Extensions.Configuration",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  "logs": []
 }

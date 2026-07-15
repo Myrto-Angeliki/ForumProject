@@ -195,11 +195,11 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Extensions.Configuration/10.0.9": {
+      "Microsoft.Extensions.Configuration/10.0.10": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "10.0.9",
-          "Microsoft.Extensions.Primitives": "10.0.9"
+          "Microsoft.Extensions.Configuration.Abstractions": "10.0.10",
+          "Microsoft.Extensions.Primitives": "10.0.10"
         },
         "compile": {
           "lib/net10.0/Microsoft.Extensions.Configuration.dll": {
@@ -884,10 +884,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Configuration/10.0.9": {
-      "sha512": "woZsWLhOQsASuxbmgiZJqiGUBNo3IjRdXC92xt8rRokza+P6/nIsnzq7sm9Or6ZYcRl2kL1ufj8HVzp1QlPTXw==",
+    "Microsoft.Extensions.Configuration/10.0.10": {
+      "sha512": "plJWK2zpWuuyxI8F8s2scx6Je7N1Ajjs6HvYUGKwRnDMWIVIz9FHwAkiT7ASgrvAOd10T0FPVlh9BzAJJME+jg==",
       "type": "package",
-      "path": "microsoft.extensions.configuration/10.0.9",
+      "path": "microsoft.extensions.configuration/10.0.10",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -908,7 +908,7 @@
         "lib/net9.0/Microsoft.Extensions.Configuration.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.xml",
-        "microsoft.extensions.configuration.10.0.9.nupkg.sha512",
+        "microsoft.extensions.configuration.10.0.10.nupkg.sha512",
         "microsoft.extensions.configuration.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -1642,7 +1642,7 @@
       "Dapper >= 2.1.79",
       "ForumProject.Application >= 1.0.0",
       "Microsoft.Data.SqlClient >= 7.0.2",
-      "Microsoft.Extensions.Configuration >= 10.0.9",
+      "Microsoft.Extensions.Configuration >= 10.0.10",
       "Microsoft.Extensions.Configuration.Json >= 10.0.10",
       "Microsoft.Extensions.DependencyInjection >= 10.0.9"
     ]
@@ -1706,7 +1706,7 @@
           },
           "Microsoft.Extensions.Configuration": {
             "target": "Package",
-            "version": "[10.0.9, )"
+            "version": "[10.0.10, )"
           },
           "Microsoft.Extensions.Configuration.Json": {
             "target": "Package",
@@ -2010,16 +2010,5 @@
         }
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1605",
-      "level": "Error",
-      "message": "Warning As Error: Detected package downgrade: Microsoft.Extensions.Configuration from 10.0.10 to 10.0.9. Reference the package directly from the project to select a different version. \r\n ForumProject.Infrastructure -> Microsoft.Extensions.Configuration.Json 10.0.10 -> Microsoft.Extensions.Configuration (>= 10.0.10) \r\n ForumProject.Infrastructure -> Microsoft.Extensions.Configuration (>= 10.0.9)",
-      "libraryId": "Microsoft.Extensions.Configuration",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  }
 }
