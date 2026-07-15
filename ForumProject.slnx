@@ -4,6 +4,7 @@
     <Project Path="src/ForumProject.Application/ForumProject.Application.csproj" />
     <Project Path="src/ForumProject.Domain/ForumProject.Domain.csproj" />
     <Project Path="src/ForumProject.Infrastructure/ForumProject.Infrastructure.csproj" />
+    <Project Path="src/ForumProject.Seeder/ForumProject.Seeder.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/ForumProject.Tests/ForumProject.Tests.csproj" />

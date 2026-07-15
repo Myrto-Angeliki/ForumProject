@@ -2,8 +2,8 @@ USE ForumDatabase;
 GO
 
 CREATE OR ALTER PROCEDURE ForumAppSchema.spComment_Upsert
-    @UserId INT,
     @PostId INT,
+    @UserId INT,
     @Content NVARCHAR(MAX),
     @CommentId INT = NULL
 AS
@@ -12,14 +12,14 @@ BEGIN
     BEGIN
 
         INSERT INTO ForumAppSchema.Comments(
-            [UserId],
             [PostId],
+            [UserId],
             [Content],
             [CreatedAt],
             [UpdatedAt]
         ) VALUES (
-            @UserId,
             @PostId,
+            @UserId,
             @Content,
             SYSUTCDATETIME(),
             SYSUTCDATETIME()
