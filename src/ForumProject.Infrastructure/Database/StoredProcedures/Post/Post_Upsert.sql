@@ -1,16 +1,6 @@
 USE ForumDatabase;
 GO
 
-SELECT [PostId],
-       [UserId],
-       [Title],
-       [Content],
-       [FeaturedImage],
-       [CreatedAt],
-       [UpdatedAt]
-FROM ForumAppSchema.Posts
-
-GO
 CREATE OR ALTER PROCEDURE ForumAppSchema.spPost_Upsert
     @UserId INT,
     @Title NVARCHAR(200),
