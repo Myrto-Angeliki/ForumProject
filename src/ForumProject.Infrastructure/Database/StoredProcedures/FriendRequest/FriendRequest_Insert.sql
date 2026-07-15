@@ -2,26 +2,23 @@ USE ForumDatabase;
 GO
 
 CREATE OR ALTER PROCEDURE ForumAppSchema.spFriendRequest_Insert
-    @SenderID INT = NULL,
-    @RecipientId INT = NULL
+    @SenderID INT,
+    @RecipientId INT
 AS
 BEGIN
-    IF NOT EXISTS(SELECT * FROM ForumAppSchema.FriendRequests WHERE SenderID = @SenderID 
-                                                                    AND RecipientId = @RecipientId)
-    BEGIN
-
-        INSERT INTO ForumAppSchema.FriendRequests(
-            [SenderId],
-            [RecipientId],
-            [CreatedAt],
-            [UpdatedAt]
-        ) VALUES (
-            @SenderID,
-            @RecipientId,
-            SYSUTCDATETIME(),
-            SYSUTCDATETIME()
-        )
-
-    END
+    INSERT INTO ForumAppSchema.FriendRequests
+    (
+        [SenderId],
+        [RecipientId],
+        [CreatedAt],
+        [UpdatedAt]
+    )
+    VALUES
+    (
+        @SenderID,
+        @RecipientId,
+        SYSUTCDATETIME(),
+        SYSUTCDATETIME()
+    )
 END
 GO

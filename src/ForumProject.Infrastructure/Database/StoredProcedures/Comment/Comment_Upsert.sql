@@ -13,7 +13,7 @@ BEGIN
 
         INSERT INTO ForumAppSchema.Comments(
             [UserId],
-            [PostId]
+            [PostId],
             [Content],
             [CreatedAt],
             [UpdatedAt]
