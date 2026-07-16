@@ -22,7 +22,7 @@ CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_GetPosts
 AS
 BEGIN
     SELECT  [Posts].[PostId],
-            [Users].[UserId],
+            [Posts].[UserId],
             [Posts].[Title],
             [Posts].[Content],
             [Posts].[FeaturedImage],
@@ -41,8 +41,8 @@ CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_GetTopics
     @IsActive INT = NULL
 AS
 BEGIN
-    SELECT  [Topics].[TopicId],
-            [Users].[UserId],
+    SELECT  [Users].[UserId],
+            [Topics].[TopicId],
             [TopicName],
             [Topics].[CreatedAt],
             [Topics].[UpdatedAt]
@@ -109,7 +109,7 @@ CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_GetFriends
     @IsActive INT = NULL
 AS 
 BEGIN
-    SELECT [Friends1].[UserId2]
+    SELECT [Friends1].[UserId2] AS FriendId
     FROM ForumAppSchema.Users AS Users
     INNER JOIN ForumAppSchema.Friends AS Friends1
         ON Friends1.UserId1 = Users.UserId
