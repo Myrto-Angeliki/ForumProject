@@ -1,17 +1,28 @@
 CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_Delete
-    @ToDeleteUserId INT = NULL,
-    @ToDeleteEmail INT = NULL,
-    @ToDeleteUsername INT = NULL
+    @UserIdParam INT = NULL,
+    @EmailParam NVARCHAR(50) = NULL,
+    @UsernameParam NVARCHAR(100) = NULL
 AS
 BEGIN
-    DECLARE @Email NVARCHAR(50) = @ToDeleteEmail;
+    DECLARE @ToDeleteEmail NVARCHAR(50)  = @UserIdParam;
+    DECLARE @ToDeleteUserId INT = @EmailParam;
 
-    IF(@ToDeleteEmail = NULL AND (@ToDeleteUserId <> NULL OR @ToDeleteUsername <> NULL))
+    IF @EmailParam IS NULL 
+        AND (@UserIdParam IS NOT NULL) OR (@UsernameParam IS NOT NULL)
     BEGIN
-        SELECT  @Email = Users.Email
+        SELECT  @ToDeleteEmail = Users.Email
             FROM  ForumAppSchema.Users AS Users
-        WHERE  Users.UserId = ISNULL(@ToDeleteUserId, Users.UserId)
-            AND Users.Username = ISNULL(@ToDeleteUsername, Users.Username);
+        WHERE  Users.UserId = ISNULL(@UserIdParam, Users.UserId)
+            AND Users.Username = ISNULL(@UsernameParam, Users.Username);
+    END
+
+    IF @UserIdParam IS NULL 
+        AND COALESCE(@EmailParam, @UsernameParam) IS NOT NULL
+    BEGIN
+        SELECT  @ToDeleteUserId = Users.UserId
+            FROM  ForumAppSchema.Users AS Users
+        WHERE  Users.Email = ISNULL(@EmailParam, Users.Email)
+            AND Users.Username = ISNULL(@UsernameParam, Users.Username);
     END
 
     EXEC ForumAppSchema.spComment_Delete  @UserId=@ToDeleteUserId;
@@ -23,12 +34,12 @@ BEGIN
     WHERE UserId1 = ISNULL(@ToDeleteUserId, UserId1) OR UserId2 = ISNULL(@ToDeleteUserId, UserId2);
 
     DELETE FROM ForumAppSchema.Users_Topics 
-    WHERE UserId = @ToDeleteUserId;
+    WHERE UserId = ISNULL(@ToDeleteUserId, UserId);
 
     DELETE  FROM ForumAppSchema.Users
-    WHERE  UserId = @ToDeleteUserId;
+    WHERE  UserId = ISNULL(@ToDeleteUserId, UserId);
 
     DELETE  FROM ForumAppSchema.Auth
-    WHERE  Auth.Email = ISNULL(@Email, Auth.Email);
+    WHERE  Auth.Email = ISNULL(@ToDeleteEmail, Auth.Email);
 END;
 GO
