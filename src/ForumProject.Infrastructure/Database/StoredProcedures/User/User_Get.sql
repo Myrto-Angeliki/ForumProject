@@ -16,7 +16,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE ForumAppSchema.spUsers_GetPosts
+CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_GetPosts
     @UserId INT = NULL,
     @IsActive INT = NULL
 AS
@@ -36,7 +36,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE ForumAppSchema.spUsers_GetTopics
+CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_GetTopics
     @UserId INT = NULL,
     @IsActive INT = NULL
 AS
@@ -56,7 +56,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE ForumAppSchema.spUsers_GetComments
+CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_GetComments
     @UserId INT = NULL,
     @IsActive INT = NULL
 AS
@@ -75,7 +75,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE ForumAppSchema.spUsers_GetFriendRequests
+CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_GetFriendRequests
     @UserId INT = NULL,
     @IsActive INT = NULL,
     @IsSender BIT = 1
