@@ -4,9 +4,13 @@ namespace ForumProject.Domain.Interfaces
 {
     public interface IUserRepository
     {
+        Task<IEnumerable<User>> GetAllAsync();
         Task<User?> GetByIdAsync(int userId);
-        Task AddAsync(User user);
-        Task UpdateAsync(User user);
-        Task DeleteAsync(int userId);
+        Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetByUsernameAsync(string username);
+
+        Task<bool> AddAsync(User user);
+        Task<bool> UpdateAsync(User user);
+        Task<bool> DeleteAsync(int userId);
     }
 }

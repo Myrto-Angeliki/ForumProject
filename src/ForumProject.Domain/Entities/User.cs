@@ -12,7 +12,7 @@ namespace ForumProject.Domain.Entities
         public List<User> Friends { get; set; } = [];
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public DateTime? UserDeactivatedAt { get; set; }
+        public DateTime? DeactivatedAt { get; set; }
 
 
         private readonly List<FriendRequest> _friendRequestsSent = [];
@@ -154,7 +154,7 @@ namespace ForumProject.Domain.Entities
         public void UpdateUserAcitvity(bool isDeactivation)
         {
             IsActive = isDeactivation ? false : true;
-            UserDeactivatedAt = isDeactivation ? DateTime.UtcNow : null;
+            DeactivatedAt = isDeactivation ? DateTime.UtcNow : null;
             UpdatedAt = DateTime.UtcNow;
         }
 
