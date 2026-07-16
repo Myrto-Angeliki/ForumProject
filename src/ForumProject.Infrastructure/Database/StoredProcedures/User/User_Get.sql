@@ -2,10 +2,12 @@ USE ForumDatabase
 GO
 
 CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_Get
-    @UserId INT = NULL
+    @UserId INT = NULL,
+    @Email NVARCHAR(50) = NULL,
+    @Username NVARCHAR(50) = NULL
 AS 
 BEGIN
-    SELECT  [UserId]
+    SELECT  [Users].[UserId],
             [Username],
             [Email],
             [IsActive],
@@ -13,6 +15,9 @@ BEGIN
             [UpdatedAt],
             [DeactivatedAt]
     FROM ForumAppSchema.Users AS Users
+    WHERE Users.UserId = ISNULL(@UserId, Users.UserId)
+        AND Email = ISNULL(@Email, Email)
+        AND Username = ISNULL(@Username, Username)
 END
 GO
 
