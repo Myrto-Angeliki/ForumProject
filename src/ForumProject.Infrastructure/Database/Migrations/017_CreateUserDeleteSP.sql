@@ -7,8 +7,8 @@ CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_Delete
     @UsernameParam NVARCHAR(100) = NULL
 AS
 BEGIN
-    DECLARE @ToDeleteEmail NVARCHAR(50)  = @UserIdParam;
-    DECLARE @ToDeleteUserId INT = @EmailParam;
+    DECLARE @ToDeleteEmail NVARCHAR(50)  = @EmailParam;
+    DECLARE @ToDeleteUserId INT = @UserIdParam;
 
     IF @EmailParam IS NULL 
         AND (@UserIdParam IS NOT NULL) OR (@UsernameParam IS NOT NULL)

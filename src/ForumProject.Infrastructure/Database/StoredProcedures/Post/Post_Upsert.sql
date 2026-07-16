@@ -42,3 +42,29 @@ BEGIN
     END
 END
 GO
+
+CREATE OR ALTER PROCEDURE ForumAppSchema.spPost_InsertTopic
+    @PostToAddTopicTo_Id INT,
+    @TopicToAddToPost_Id INT
+AS
+BEGIN
+    INSERT INTO ForumAppSchema.Posts_Topics(
+        PostId,
+        TopicId
+    ) VALUES(
+        @PostToAddTopicTo_Id,
+        @TopicToAddToPost_Id
+    );
+END
+GO
+
+CREATE OR ALTER PROCEDURE ForumAppSchema.spPost_DeleteTopic
+    @PostToDeleteTopicFrom_Id INT,
+    @TopicToDeleteFromPost_Id INT
+AS
+BEGIN
+    DELETE FROM ForumAppSchema.Posts_Topics
+    WHERE PostId = @PostToDeleteTopicFrom_Id
+        AND TopicId =  @TopicToDeleteFromPost_Id;
+END
+GO
