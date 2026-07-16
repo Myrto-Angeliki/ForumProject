@@ -51,7 +51,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE ForumAppSchema.spPost_GetPosts
+CREATE OR ALTER PROCEDURE ForumAppSchema.spTopic_GetPosts
     @TopicId INT,
     @PostId INT = NULL
 AS
@@ -73,7 +73,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE ForumAppSchema.spPost_GetUsers
+CREATE OR ALTER PROCEDURE ForumAppSchema.spTopic_GetUsers
     @TopicId INT,
     @UserId INT = NULL
 AS
