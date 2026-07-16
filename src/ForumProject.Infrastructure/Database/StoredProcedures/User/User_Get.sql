@@ -114,18 +114,34 @@ CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_GetFriends
     @IsActive INT = NULL
 AS 
 BEGIN
-    SELECT [Friends1].[UserId2] AS FriendId
-    FROM ForumAppSchema.Users AS Users
-    INNER JOIN ForumAppSchema.Friends AS Friends1
-        ON Friends1.UserId1 = Users.UserId
-    WHERE Users.UserId = ISNULL(@UserId, Users.UserId)
-        AND ISNULL(Users.IsActive, 0) = COALESCE(@IsActive, Users.IsActive, 0)
-    UNION ALL
-    SELECT [Friends2].[UserId1]
-    FROM ForumAppSchema.Users AS Users
-    INNER JOIN ForumAppSchema.Friends AS Friends2
-        ON Friends2.UserId2 = Users.UserId
-    WHERE Users.UserId = ISNULL(@UserId, Users.UserId)
-        AND ISNULL(Users.IsActive, 0) = COALESCE(@IsActive, Users.IsActive, 0)
+    SELECT  [Users2].[UserId] AS FriendId,
+            [Users2].[Username] AS FriendUsername,
+            [Users2].[Email] AS FriendEmail,
+            [Users2].[IsActive] AS FriendIsActive,
+            [Users2].[CreatedAt] AS FriendCreatedAt,
+            [Users2].[UpdatedAt] AS FriendUpdatedAt,
+            [Users2].[DeactivatedAt] AS FriendDeactivatedAt
+    FROM ForumAppSchema.Users AS Users1
+    INNER JOIN ForumAppSchema.Friends AS Friends
+        ON Friends.UserId1 = Users1.UserId
+    INNER JOIN ForumAppSchema.Users AS Users2
+        ON Users2.UserId = Friends.UserId2
+    WHERE Users1.UserId = ISNULL(@UserId, Users1.UserId)
+        AND ISNULL(Users1.IsActive, 0) = COALESCE(@IsActive, Users1.IsActive, 0)
+    UNION
+    SELECT [Users2].[UserId] AS FriendId,
+            [Users2].[Username] AS FriendUsername,
+            [Users2].[Email] AS FriendEmail,
+            [Users2].[IsActive] AS FriendIsActive,
+            [Users2].[CreatedAt] AS FriendCreatedAt,
+            [Users2].[UpdatedAt] AS FriendUpdatedAt,
+            [Users2].[DeactivatedAt] AS FriendDeactivatedAt
+    FROM ForumAppSchema.Users AS Users1
+    INNER JOIN ForumAppSchema.Friends AS Friends
+        ON Friends.UserId2 = Users1.UserId
+    INNER JOIN ForumAppSchema.Users AS Users2
+        ON Users2.UserId = Friends.UserId1
+    WHERE Users1.UserId = ISNULL(@UserId, Users1.UserId)
+        AND ISNULL(Users1.IsActive, 0) = COALESCE(@IsActive, Users1.IsActive, 0)
 END
 GO

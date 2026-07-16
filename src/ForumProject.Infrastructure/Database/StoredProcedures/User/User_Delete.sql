@@ -43,3 +43,16 @@ BEGIN
     WHERE  Auth.Email = ISNULL(@ToDeleteEmail, Auth.Email);
 END;
 GO
+
+CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_DeleteFriend
+    @FriendId1 INT,
+    @FriendId2 INT = NULL
+AS
+BEGIN
+    DELETE FROM ForumAppSchema.Friends
+    WHERE UserId1 = @FriendId1
+        AND UserId2 = ISNULL(@FriendId2, UserId2);
+    DELETE FROM ForumAppSchema.Friends
+    WHERE UserId1 = ISNULL(@FriendId2, UserId1) 
+        AND UserId2 = @FriendId1;
+END

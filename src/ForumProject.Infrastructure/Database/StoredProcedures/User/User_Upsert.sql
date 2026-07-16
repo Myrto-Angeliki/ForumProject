@@ -148,17 +148,6 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_DeleteFriend
-    @FriendshipMember1Id INT,
-    @FriendshipMember2Id INT
-AS
-BEGIN
-    DELETE FROM ForumAppSchema.Friends
-    WHERE UserId1 = @FriendshipMember1Id
-        AND UserId2 = @FriendshipMember2Id;
-END
-GO
-
 CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_FollowTopic
     @FollowerId INT,
     @TopicToFollowId INT
