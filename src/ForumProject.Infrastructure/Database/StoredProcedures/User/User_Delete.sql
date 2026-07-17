@@ -39,8 +39,7 @@ BEGIN
     DELETE  FROM ForumAppSchema.Users
     WHERE  UserId = ISNULL(@ToDeleteUserId, UserId);
 
-    DELETE  FROM ForumAppSchema.Auth
-    WHERE  Auth.Email = ISNULL(@ToDeleteEmail, Auth.Email);
+    EXEC ForumAppSchema.spRegistration_Delete @Email=@ToDeleteEmail;
 END;
 GO
 
