@@ -1,4 +1,6 @@
-﻿using ForumProject.Infrastructure.Persistence;
+﻿using ForumProject.Domain.Interfaces;
+using ForumProject.Infrastructure.Persistence;
+using ForumProject.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -15,6 +17,13 @@ public static class DependencyInjection
                 "Connection string 'DefaultConnection' was not found.");
 
         services.AddSingleton(new DataContextDapper(connectionString));
+
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IPostRepository, PostRepository>();
+        services.AddScoped<ICommentRepository, CommentRepository>();
+        services.AddScoped<ITopicRepository, TopicRepository>();
+        services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+        services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
 
         return services;
     }
