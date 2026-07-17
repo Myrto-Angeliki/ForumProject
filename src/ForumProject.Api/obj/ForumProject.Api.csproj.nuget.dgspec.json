@@ -53,9 +53,17 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[10.0.10, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[10.0.9, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[10.2.3, )"
             }
           },
           "imports": [
@@ -540,6 +548,16 @@
         "net10.0": {
           "framework": "net10.0",
           "targetAlias": "net10.0",
+          "dependencies": {
+            "Microsoft.Extensions.Configuration": {
+              "target": "Package",
+              "version": "[10.0.10, )"
+            },
+            "Microsoft.Extensions.DependencyInjection": {
+              "target": "Package",
+              "version": "[10.0.10, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -1223,17 +1241,9 @@
               "target": "Package",
               "version": "[7.0.2, )"
             },
-            "Microsoft.Extensions.Configuration": {
-              "target": "Package",
-              "version": "[10.0.10, )"
-            },
             "Microsoft.Extensions.Configuration.Json": {
               "target": "Package",
               "version": "[10.0.10, )"
-            },
-            "Microsoft.Extensions.DependencyInjection": {
-              "target": "Package",
-              "version": "[10.0.9, )"
             }
           },
           "imports": [

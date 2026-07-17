@@ -1,6 +1,6 @@
 using ForumProject.Domain.Entities;
 
-namespace ForumProject.Domain.Interfaces
+namespace ForumProject.Application.Features.Posts.Interfaces
 {
     public interface IPostRepository
     {

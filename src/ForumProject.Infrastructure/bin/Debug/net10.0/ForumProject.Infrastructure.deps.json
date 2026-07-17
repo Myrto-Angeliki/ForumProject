@@ -11,9 +11,7 @@
           "Dapper": "2.1.79",
           "ForumProject.Application": "1.0.0",
           "Microsoft.Data.SqlClient": "7.0.2",
-          "Microsoft.Extensions.Configuration": "10.0.10",
-          "Microsoft.Extensions.Configuration.Json": "10.0.10",
-          "Microsoft.Extensions.DependencyInjection": "10.0.9"
+          "Microsoft.Extensions.Configuration.Json": "10.0.10"
         },
         "runtime": {
           "ForumProject.Infrastructure.dll": {}
@@ -162,7 +160,7 @@
       "Microsoft.Extensions.Caching.Memory/9.0.13": {
         "dependencies": {
           "Microsoft.Extensions.Caching.Abstractions": "9.0.13",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.9",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10",
           "Microsoft.Extensions.Logging.Abstractions": "10.0.0",
           "Microsoft.Extensions.Options": "9.0.13",
           "Microsoft.Extensions.Primitives": "10.0.10"
@@ -226,22 +224,22 @@
           }
         }
       },
-      "Microsoft.Extensions.DependencyInjection/10.0.9": {
+      "Microsoft.Extensions.DependencyInjection/10.0.10": {
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.9"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10"
         },
         "runtime": {
           "lib/net10.0/Microsoft.Extensions.DependencyInjection.dll": {
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.926.27113"
+            "fileVersion": "10.0.1026.32716"
           }
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.9": {
+      "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.10": {
         "runtime": {
           "lib/net10.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
             "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.926.27113"
+            "fileVersion": "10.0.1026.32716"
           }
         }
       },
@@ -279,7 +277,7 @@
       },
       "Microsoft.Extensions.Logging.Abstractions/10.0.0": {
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.9"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10"
         },
         "runtime": {
           "lib/net10.0/Microsoft.Extensions.Logging.Abstractions.dll": {
@@ -290,7 +288,7 @@
       },
       "Microsoft.Extensions.Options/9.0.13": {
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.9",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.10",
           "Microsoft.Extensions.Primitives": "10.0.10"
         },
         "runtime": {
@@ -453,7 +451,9 @@
       },
       "ForumProject.Application/1.0.0": {
         "dependencies": {
-          "ForumProject.Domain": "1.0.0"
+          "ForumProject.Domain": "1.0.0",
+          "Microsoft.Extensions.Configuration": "10.0.10",
+          "Microsoft.Extensions.DependencyInjection": "10.0.10"
         },
         "runtime": {
           "ForumProject.Application.dll": {
@@ -562,19 +562,19 @@
       "path": "microsoft.extensions.configuration.json/10.0.10",
       "hashPath": "microsoft.extensions.configuration.json.10.0.10.nupkg.sha512"
     },
-    "Microsoft.Extensions.DependencyInjection/10.0.9": {
+    "Microsoft.Extensions.DependencyInjection/10.0.10": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-NijozhERJDIaJ4k5TSMy1jOi0cSC2HfkvRD/Sl+kGSSKgVbFnF4GxgtMN/MrzHB8D1JxIrD4xSer9Blh9v3axQ==",
-      "path": "microsoft.extensions.dependencyinjection/10.0.9",
-      "hashPath": "microsoft.extensions.dependencyinjection.10.0.9.nupkg.sha512"
+      "sha512": "sha512-ANyvsgkNBRvcJh2XLgn8veGmajf+8m0AbKK+HPWdRL1yraSNVVSmQhFntLtdz/C795jxqqup+k05cs/3jZQPOA==",
+      "path": "microsoft.extensions.dependencyinjection/10.0.10",
+      "hashPath": "microsoft.extensions.dependencyinjection.10.0.10.nupkg.sha512"
     },
-    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.9": {
+    "Microsoft.Extensions.DependencyInjection.Abstractions/10.0.10": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-g41l/30G3K4B/d/L8kjux0+30e27c8D0FVQ/PFCpbekgfDpj9mnDhieP67EqXWvl1EWNeZh2rpR4F5B/jcDOHA==",
-      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.9",
-      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.10.0.9.nupkg.sha512"
+      "sha512": "sha512-z/2xXlFw2aLGjHyEm6E0tQ+In6VfzQzTrtArbQ2c0TQE16ZbyDCMGPvaUT9I0s8rgy9sRWlU2P9waW37qV04qA==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/10.0.10",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.10.0.10.nupkg.sha512"
     },
     "Microsoft.Extensions.FileProviders.Abstractions/10.0.10": {
       "type": "package",

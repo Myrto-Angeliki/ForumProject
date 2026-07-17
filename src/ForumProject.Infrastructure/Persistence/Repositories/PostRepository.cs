@@ -1,7 +1,7 @@
 using System.Data;
 using Dapper;
 using ForumProject.Domain.Entities;
-using ForumProject.Domain.Interfaces;
+using ForumProject.Application.Features.Posts.Interfaces;
 using ForumProject.Infrastructure.Persistence;
 
 namespace ForumProject.Infrastructure.Repositories

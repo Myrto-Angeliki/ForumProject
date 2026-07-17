@@ -1,4 +1,6 @@
 ﻿using ForumProject.Domain.Interfaces;
+using ForumProject.Application.Features.Comments.Interfaces;
+using ForumProject.Application.Features.Posts.Interfaces;
 using ForumProject.Infrastructure.Persistence;
 using ForumProject.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;

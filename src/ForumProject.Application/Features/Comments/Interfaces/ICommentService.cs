@@ -1,7 +1,7 @@
 
 using ForumProject.Application.Features.Comments.DTOs;
 
-namespace ForumProject.Application.Features.Comments.Services
+namespace ForumProject.Application.Features.Comments.Interfaces
 {
     public interface ICommentService
     {

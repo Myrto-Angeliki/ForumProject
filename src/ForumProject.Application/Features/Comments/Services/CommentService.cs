@@ -1,7 +1,6 @@
 using ForumProject.Application.Features.Comments.DTOs;
-using ForumProject.Application.Features.Comments.Services;
+using ForumProject.Application.Features.Comments.Interfaces;
 using ForumProject.Domain.Entities;
-using ForumProject.Domain.Interfaces;
 
 namespace ForumProject.Infrastructure.Services
 {
