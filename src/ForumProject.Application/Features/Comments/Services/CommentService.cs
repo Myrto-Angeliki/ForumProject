@@ -2,7 +2,7 @@ using ForumProject.Application.Features.Comments.DTOs;
 using ForumProject.Application.Features.Comments.Interfaces;
 using ForumProject.Domain.Entities;
 
-namespace ForumProject.Infrastructure.Services
+namespace ForumProject.Application.Features.Comments.Services
 {
     public class CommentService : ICommentService
     {

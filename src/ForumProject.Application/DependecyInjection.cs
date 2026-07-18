@@ -1,6 +1,7 @@
 using ForumProject.Application.Features.Comments.Interfaces;
+using ForumProject.Application.Features.Comments.Services;
 using ForumProject.Application.Features.Posts.Interfaces;
-using ForumProject.Infrastructure.Services;
+using ForumProject.Application.Features.Posts.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ForumProject.Application
