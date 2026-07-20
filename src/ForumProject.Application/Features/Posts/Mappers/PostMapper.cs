@@ -14,8 +14,6 @@ namespace ForumProject.Application.Features.Posts.Mappers
                 Title = postDto.Title,
                 Content = postDto.Content,
                 FeaturedImage = postDto.FeaturedImage,
-                PostTopics = postDto.PostTopics,
-                Comments = postDto.Comments,
                 CreatedAt = postDto.CreatedAt,
                 UpdatedAt = postDto.UpdatedAt
             };
@@ -32,8 +30,6 @@ namespace ForumProject.Application.Features.Posts.Mappers
                 Title = post.Title,
                 Content = post.Content,
                 FeaturedImage = post.FeaturedImage,
-                PostTopics = post.PostTopics,
-                Comments = post.Comments,
                 CreatedAt = post.CreatedAt,
                 UpdatedAt = post.UpdatedAt
             };

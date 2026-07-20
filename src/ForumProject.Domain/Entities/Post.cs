@@ -44,6 +44,14 @@ namespace ForumProject.Domain.Entities
             UpdatedAt = DateTime.UtcNow;
         }
 
+        public void CheckTitleNotEmpty()
+        {
+            if(Title == "")
+            {
+                throw new Exception("Title content cannot be empty!");
+            }
+        }
+
         public void CheckContentNotEmpty()
         {
             if(Content == "")

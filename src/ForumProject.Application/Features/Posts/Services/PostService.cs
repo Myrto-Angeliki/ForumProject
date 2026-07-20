@@ -16,9 +16,7 @@ namespace ForumProject.Application.Features.Posts.Services
 
         public async Task<bool> AddAsync(PostDto postDto)
         {
-            Post post = PostMapper.MapToPost(postDto);
-            post.CheckAtLeastOneTopic();
-            post.CheckContentNotEmpty();
+            Post post = PostServiceHelper.GetPostToUpsert(postDto, isInsert: true);
             return await _postRepository.AddAsync(post);
         }
 
@@ -51,9 +49,7 @@ namespace ForumProject.Application.Features.Posts.Services
 
         public async Task<bool> UpdateAsync(PostDto postDto)
         {
-            Post post = PostMapper.MapToPost(postDto);
-            post.CheckAtLeastOneTopic();
-            post.CheckContentNotEmpty();
+            Post post = PostServiceHelper.GetPostToUpsert(postDto, isInsert: false);
             return await _postRepository.UpdateAsync(post);
         }
     }

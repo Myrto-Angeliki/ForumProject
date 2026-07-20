@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ForumProject.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/")]
     public class PostController : ControllerBase
     {
         private readonly IPostService _postService;
@@ -16,13 +16,13 @@ namespace ForumProject.Api.Controllers
             _postService = postService;
         }
 
-        [HttpGet("Posts")]
+        [HttpGet("posts")]
         public async Task<IEnumerable<PostDto>> GetPosts()
         {
             return await _postService.GetAllAsync();
         }
 
-        [HttpGet("{postId}")]
+        [HttpGet("posts/post-id={postId}")]
         public async Task<PostDto?> GetPost(int postId)
         {
             var response = await _postService.GetByIdAsync(postId);
@@ -33,13 +33,13 @@ namespace ForumProject.Api.Controllers
             return response;
         }
 
-        [HttpGet("Posts/{userId}")]
+        [HttpGet("posts/user-id={userId}")]
         public async Task<IEnumerable<PostDto>> GetUserPosts(int userId)
         {
             return await _postService.GetByUserAsync(userId);
         }
 
-        [HttpGet("MyPosts")]
+        [HttpGet("user/my-posts")]
         public async Task<IEnumerable<PostDto>> GetMyPosts()
         {
             int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
@@ -47,26 +47,31 @@ namespace ForumProject.Api.Controllers
             return await _postService.GetByUserAsync(userId);
         }
 
-        [HttpPut("UpsertComment")]
-        public async Task<IActionResult> UpsertComment(PostDto postDto)
+        [HttpPost("user/add-post")]
+        public async Task<IActionResult> AddPost(PostDto postDto)
         {
-            bool isAnyRowAffected;
-            if(postDto.PostId != 0)
-            {
-                isAnyRowAffected = await _postService.UpdateAsync(postDto);
-            }
-            else
-            {
-                isAnyRowAffected = await _postService.AddAsync(postDto);
-            }
+            bool isAnyRowAffected = await _postService.AddAsync(postDto);
+            
             if(isAnyRowAffected)
             {
                 return Ok();
             }
-            throw new Exception("Failed to Upsert Post!");
+            throw new Exception("Failed to Add Post!");
         }
 
-        [HttpDelete("{postId}")]
+        [HttpPut("user/edit-post")]
+        public async Task<IActionResult> EditPost(PostDto postDto)
+        {
+            bool isAnyRowAffected = await _postService.UpdateAsync(postDto);
+
+            if(isAnyRowAffected)
+            {
+                return Ok();
+            }
+            throw new Exception("Failed to Update Post!");
+        }
+
+        [HttpDelete("user/post-id={postId}")]
         public async Task<IActionResult> DeletePost(int postId)
         {
             bool isAnyRowAffected = await _postService.DeleteAsync(postId);

@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ForumProject.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/")]
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -15,13 +15,13 @@ namespace ForumProject.Api.Controllers
             _commentService = commentService;
         }
 
-        [HttpGet("Comments/{postId}")]
+        [HttpGet("posts/post-id={postId}/comments")]
         public async Task<IEnumerable<CommentDto>> GetComments(int postId = 0)
         {
             return await _commentService.GetByPost(postId);
         }
 
-        [HttpGet("MyComments")]
+        [HttpGet("user/my-comments")]
         public async Task<IEnumerable<CommentDto>> GetMyComments()
         {
             int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
@@ -29,7 +29,7 @@ namespace ForumProject.Api.Controllers
             return await _commentService.GetByUser(userId);
         }
 
-        [HttpPut("UpsertComment")]
+        [HttpPut("user/upsert-comment")]
         public async Task<IActionResult> UpsertComment(CommentDto commentDto)
         {
             bool isAnyRowAffected;
@@ -48,7 +48,7 @@ namespace ForumProject.Api.Controllers
             throw new Exception("Failed to Upsert Comment!");
         }
 
-        [HttpDelete("{commentId}")]
+        [HttpDelete("user/comment-id={commentId}")]
         public async Task<IActionResult> DeleteComment(int commentId)
         {
             bool isAnyRowAffected = await _commentService.DeleteAsync(commentId);

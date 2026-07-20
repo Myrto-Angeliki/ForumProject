@@ -9,8 +9,6 @@ namespace ForumProject.Application.Features.Posts.DTOs
         public string Title { get; set; } = "";
         public string Content { get; set; } = "";
         public string FeaturedImage { get; set; } = "";
-        public List<Topic> PostTopics { get; set; } = new();
-        public List<Comment> Comments { get; set; } = new();
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
     }
