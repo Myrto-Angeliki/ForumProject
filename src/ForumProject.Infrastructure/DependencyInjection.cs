@@ -5,6 +5,8 @@ using ForumProject.Infrastructure.Persistence;
 using ForumProject.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ForumProject.Application.Features.Users.Interfaces;
+using ForumProject.Application.Features.Auths.Interfaces;
 
 namespace ForumProject.Infrastructure;
 

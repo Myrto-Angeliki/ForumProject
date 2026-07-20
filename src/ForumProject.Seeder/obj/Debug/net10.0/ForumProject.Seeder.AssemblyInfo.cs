@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ForumProject.Seeder")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d9bb539b319f5704da5fa49146b40a7386da3b5c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+029f83ab94facd2deadee5cb2177192cbcea1438")]
 [assembly: System.Reflection.AssemblyProductAttribute("ForumProject.Seeder")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ForumProject.Seeder")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

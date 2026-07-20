@@ -1,7 +1,7 @@
 using System.Data;
 using Dapper;
+using ForumProject.Application.Features.Auths.Interfaces;
 using ForumProject.Domain.Entities;
-using ForumProject.Domain.Interfaces;
 using ForumProject.Infrastructure.Persistence;
 
 namespace ForumProject.Infrastructure.Repositories
@@ -63,7 +63,7 @@ namespace ForumProject.Infrastructure.Repositories
         {
             using(var connection = _context.CreateConnection())
             {
-                Auth? authenticatedUser = await connection.QuerySingleAsync<Auth>(
+                Auth? authenticatedUser = await connection.QuerySingleOrDefaultAsync<Auth>(
                     "ForumAppSchema.spLoginConfirmation_Get"
                     , new {Email = email}
                     , commandType: CommandType.StoredProcedure

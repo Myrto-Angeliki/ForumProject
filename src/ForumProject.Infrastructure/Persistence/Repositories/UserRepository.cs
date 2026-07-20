@@ -1,8 +1,7 @@
 using System.Data;
-using System.Runtime.CompilerServices;
 using Dapper;
+using ForumProject.Application.Features.Users.Interfaces;
 using ForumProject.Domain.Entities;
-using ForumProject.Domain.Interfaces;
 using ForumProject.Infrastructure.Persistence;
 
 namespace ForumProject.Infrastructure.Repositories
