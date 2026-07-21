@@ -11,7 +11,7 @@ namespace ForumProject.Application.Features.Auths.Services
         private readonly IUserRepository _userRepository;
         private readonly AuthServiceHelper _authServiceHelper;
 
-        public  AuthService(IAuthRepository authRepository, IUserRepository userRepository
+        public AuthService(IAuthRepository authRepository, IUserRepository userRepository
             , AuthServiceHelper authServiceHelper)
         {
             _authRepository = authRepository;
@@ -19,37 +19,74 @@ namespace ForumProject.Application.Features.Auths.Services
             _authServiceHelper = authServiceHelper;
         }
 
-        public Task<bool> ChangePasswordAsync(LoginDto userForPasswordChange)
+        public async Task<bool> ChangePasswordAsync(LoginDto userForPasswordChange)
         {
-            throw new NotImplementedException();
+            if(await _authServiceHelper.setPassword(userForPasswordChange, _authRepository))
+            {
+                return true;
+            }
+            return false;
         }
 
 
-        public Task<User?> LoginAsync(LoginDto userForLogin)
+        public async Task<Dictionary<string, string>> LoginAsync(LoginDto userForLogin)
         {
-            throw new NotImplementedException();
+            Auth? userForConfirmation = await _authRepository.GetByEmailAsync(userForLogin.Email);
+
+            if (userForConfirmation != null)
+            {
+                byte[] passwordHash = _authServiceHelper.GetPasswordHash(userForLogin.Password
+                                        , userForConfirmation.PasswordSalt);
+
+                for (int index = 0; index < passwordHash.Length; index++)
+                {
+                    if (passwordHash[index] != userForConfirmation.PasswordHash[index])
+                    {
+                        throw new Exception("401: Incorrect Password!");
+                    }
+                }
+
+                User? loggedInUser = await _userRepository.GetByEmailAsync(userForLogin.Email);
+                if(loggedInUser != null)
+                {
+                    return new Dictionary<string, string>
+                    {
+                        {"token", _authServiceHelper.CreateToken(loggedInUser.UserId)}
+                    };
+                }
+                throw new Exception("User not found with email: " + userForLogin.Email);
+            }
+            throw new Exception("Authenticated User not found with email: " + userForLogin.Email);
         }
 
         public async Task<bool> RegisterUserAsync(RegistrationDto registrationDto)
         {
             if (registrationDto.Password == registrationDto.PasswordConfirm)
             {
-                Auth? userToRegister = await _authRepository.GetByEmailAsync(registrationDto.Email);
-                if(userToRegister == null)
+                Auth? userAlreadyRegistered = await _authRepository.GetByEmailAsync(registrationDto.Email);
+                if (userAlreadyRegistered == null)
                 {
-                    LoginDto userForSetPassword = new LoginDto() {
+                    LoginDto userForSetPassword = new LoginDto
+                    {
                         Email = registrationDto.Email,
                         Password = registrationDto.Password
                     };
-                    if(await _authServiceHelper.setPassword(userForSetPassword, _authRepository))
+                    if (await _authServiceHelper.setPassword(userForSetPassword, _authRepository))
                     {
-                        //@TODO
-                        //map registrationDto to User instance
-                        //upsert user and return the result of the upsert
+                        User userToRegister = new User
+                        {
+                            Email = registrationDto.Email,
+                            Username = registrationDto.Email
+                        };
+                        bool wasAddSuccessful = await _userRepository.AddAsync(userToRegister);
+
+                        return wasAddSuccessful;
                     }
+                    throw new Exception("Failed to register user.");
                 }
+                throw new Exception("User already exists!");
             }
-            throw new NotImplementedException();
+            throw new Exception("Passwords do not match!");
         }
     }
 }
