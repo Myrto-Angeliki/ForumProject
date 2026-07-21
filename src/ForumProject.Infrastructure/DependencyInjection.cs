@@ -1,12 +1,13 @@
 ﻿using ForumProject.Domain.Interfaces;
-using ForumProject.Application.Features.Comments.Interfaces;
-using ForumProject.Application.Features.Posts.Interfaces;
-using ForumProject.Infrastructure.Persistence;
-using ForumProject.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ForumProject.Infrastructure.Persistence;
+using ForumProject.Infrastructure.Repositories;
+using ForumProject.Application.Features.Comments.Interfaces;
+using ForumProject.Application.Features.Posts.Interfaces;
 using ForumProject.Application.Features.Users.Interfaces;
 using ForumProject.Application.Features.Auths.Interfaces;
+using ForumProject.Application.Features.Friendships.Interfaces;
 
 namespace ForumProject.Infrastructure;
 
