@@ -1,7 +1,9 @@
+using AutoMapper;
 using ForumProject.Application.Features.Friendships.Interfaces;
 using ForumProject.Application.Features.Users.DTOs;
 using ForumProject.Application.Features.Users.Interfaces;
 using ForumProject.Domain.Entities;
+using Microsoft.Extensions.Logging;
 
 namespace ForumProject.Application.Features.Users.Services
 {
@@ -9,11 +11,16 @@ namespace ForumProject.Application.Features.Users.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IFriendshipRepository _friendshipRepository;
+        private readonly IMapper _mapper;
 
         public  UserService(IUserRepository userRepository, IFriendshipRepository friendshipRepository)
         {
             _userRepository = userRepository;
             _friendshipRepository = friendshipRepository;
+            _mapper = new Mapper(new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UpdateUserDto, User>();
+            }));
         }
 
         private async Task<bool> UpdateFriendship(UpdateFriendDto updateFriendDto, string action)
@@ -55,16 +62,7 @@ namespace ForumProject.Application.Features.Users.Services
 
         public async Task<bool> UpdateUser(UpdateUserDto userDto)
         {
-            //@TODO
-            //create mapper
-            //handle deactivate action
-            User userToUpdate = new User
-            {
-                UserId = userDto.UserId,
-                Email = userDto.Email,
-                Username = userDto.Username,
-                IsActive = userDto.IsActive
-            };
+            User userToUpdate = _mapper.Map<User>(userDto);
             return await _userRepository.UpdateAsync(userToUpdate);
         }
     }

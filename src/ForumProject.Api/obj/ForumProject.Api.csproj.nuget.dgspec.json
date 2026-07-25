@@ -551,7 +551,7 @@
           "dependencies": {
             "AutoMapper": {
               "target": "Package",
-              "version": "[16.2.0, )"
+              "version": "[14.0.0, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
