@@ -94,25 +94,27 @@ namespace ForumProject.Domain.Entities
             if(isSender)
             {
                 if(action.ToLower() == "add")
+                {
                     _friendRequestsSent.Add(friendRequest);
+                    friendRequest.Recipient._friendRequestsReceived.Add(friendRequest);
+                }
                 else if(action.ToLower() == "remove")
+                {
                     _friendRequestsSent.Remove(friendRequest);
+                    friendRequest.Recipient._friendRequestsReceived.Remove(friendRequest);
+                }
                 else
                     throw new Exception("Cannot modify sent friend requests with action: " 
                         + action + ".");    
             }
             else
             {
-                if(action.ToLower() == "add")
-                    _friendRequestsReceived.Add(friendRequest);
-                else if(action.ToLower() == "remove")
-                    _friendRequestsReceived.Remove(friendRequest);
-                else
-                    throw new Exception("Cannot modify received friend requests with action: " 
-                        + action + ".");
+                _friendRequestsReceived.Remove(friendRequest);
+                friendRequest.Recipient._friendRequestsSent.Remove(friendRequest);
             }
 
             UpdatedAt = DateTime.UtcNow;
+            friendRequest.Recipient.UpdatedAt = DateTime.UtcNow;
         }
 
         public void SendFriendRequest(User recipient)

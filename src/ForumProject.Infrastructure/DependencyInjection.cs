@@ -1,4 +1,4 @@
-﻿using ForumProject.Domain.Interfaces;
+﻿using ForumProject.Application.Features.FriendRequests.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ForumProject.Infrastructure.Persistence;
@@ -8,6 +8,7 @@ using ForumProject.Application.Features.Posts.Interfaces;
 using ForumProject.Application.Features.Users.Interfaces;
 using ForumProject.Application.Features.Auths.Interfaces;
 using ForumProject.Application.Features.Friendships.Interfaces;
+using ForumProject.Application.Features.Topics.Interfaces;
 
 namespace ForumProject.Infrastructure;
 
