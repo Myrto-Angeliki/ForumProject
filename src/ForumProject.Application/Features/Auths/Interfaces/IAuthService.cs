@@ -5,7 +5,7 @@ namespace ForumProject.Application.Features.Auths.Interfaces
 {
     public interface IAuthService
     {
-        Task<bool> RegisterUserAsync(RegistrationDto authDto);
+        Task<bool> RegisterUserAsync(RegistrationDto registrationDto);
         Task<bool> ChangePasswordAsync(LoginDto userForPasswordChange);
         Task<Dictionary<string, string>> LoginAsync(LoginDto userForLogin);
     }
