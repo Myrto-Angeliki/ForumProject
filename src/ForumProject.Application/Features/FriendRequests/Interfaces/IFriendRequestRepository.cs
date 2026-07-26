@@ -6,11 +6,11 @@ namespace ForumProject.Application.Features.FriendRequests.Interfaces
     {
         Task<IEnumerable<FriendRequest>> GetAllAsync();
         Task<FriendRequest?> GetAsync(int senderId, int recipientId);
-        Task<IEnumerable<FriendRequest>> GetBySenderAsync(int senderId);
-        Task<IEnumerable<FriendRequest>> GetByRecipientAsync(int recipientId);
+        Task<IEnumerable<FriendRequest>> GetBySenderIdAsync(int senderId);
+        Task<IEnumerable<FriendRequest>> GetByRecipientIdAsync(int recipientId);
         Task<bool> AddAsync(int senderId, int recipientId);
         Task<bool> DeleteAsync(int senderId, int recipientId);
-        Task<bool> DeleteBySenderAsync(int senderId);
-        Task<bool> DeleteByRecipientAsync(int recipientId);
+        Task<bool> DeleteBySenderIdAsync(int senderId);
+        Task<bool> DeleteByRecipientIdAsync(int recipientId);
     }
 }

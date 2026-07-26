@@ -1,8 +1,9 @@
+using ForumProject.Application.Features.FriendRequests.DTOs;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
 using ForumProject.Application.Features.Users.Interfaces;
 using ForumProject.Domain.Entities;
 
-namespace ForumProject.Application.Features.Comments.Services
+namespace ForumProject.Application.Features.FriendRequests.Services
 {
     public class FriendRequestService : IFriendRequestService
     {
@@ -16,54 +17,94 @@ namespace ForumProject.Application.Features.Comments.Services
             _userRepository = userRepository;
         }
 
-        private async Task UpdateFriendRequests(int senderId, int recipientId
-            , string updateAction, bool isCalledBySender)//createDTO?
+        private async Task UpdateFriendRequests(FriendRequestDto friendRequestDto)
         {
-            User? sender = await _userRepository.GetByIdAsync(senderId);
-            User? recipient = await _userRepository.GetByIdAsync(recipientId);
-            if(sender != null && recipient != null)
+            FriendRequest? friendRequest = await _friendRequestRepository.GetAsync(
+                    friendRequestDto.SenderId
+                    , friendRequestDto.RecipientId);
+            if(friendRequest != null)
             {
-                
+                friendRequest.UpdateUserFriendRequestLists(friendRequestDto.Action);
+                return;
             }
+            throw new Exception("Cannot update friend request that does not exist!");
         }
 
-        public async Task<bool> AddAsync(int senderId, int recipientId)
+        public async Task<bool> AddAsync(FriendRequestDto friendRequestDto)
         {
-            bool isRowAffected = await _friendRequestRepository.AddAsync(senderId, recipientId);
+            bool isAnyRowAffected = await _friendRequestRepository.AddAsync(
+                friendRequestDto.SenderId
+                , friendRequestDto.RecipientId);
 
-            return isRowAffected;
+            await UpdateFriendRequests(friendRequestDto);
+
+            return isAnyRowAffected;
         }
 
-        public async Task<bool> DeleteAsync(int senderId, int recipientId)
+        public async Task<bool> DeleteAsync(FriendRequestDto friendRequestDto)
         {
-            bool isRowAffected = await _friendRequestRepository.DeleteAsync(senderId, recipientId);
-            return isRowAffected;
+            bool isAnyRowAffected = await _friendRequestRepository.DeleteAsync(
+                friendRequestDto.SenderId
+                , friendRequestDto.RecipientId);
+
+            await UpdateFriendRequests(friendRequestDto);
+
+            return isAnyRowAffected;
         }
 
-        public async Task<bool> DeleteByRecipientAsync(int recipientId)
+        private async void DeleteByRecipientOrSenderIdAsync(int userId, bool isSender)
         {
-            bool isRowAffected = await _friendRequestRepository.DeleteByRecipientAsync(recipientId);
-            return isRowAffected;
+            User? user = await _userRepository.GetByIdAsync(userId);
+            if(user != null)
+            {
+                if(isSender)
+                    user.FriendRequestsSent = new();
+                else 
+                    user.FriendRequestsReceived = new();
+            }
+            else
+                throw new Exception("User not found!");
         }
 
-        public Task<bool> DeleteBySenderAsync(int senderId)
+        public async Task<bool> DeleteByRecipientIdAsync(int recipientId)
         {
-            throw new NotImplementedException();
+            bool isAnyRowAffected = await _friendRequestRepository.DeleteByRecipientIdAsync(recipientId);
+            DeleteByRecipientOrSenderIdAsync(recipientId, isSender: false);
+            
+            return isAnyRowAffected;
         }
 
-        public async Task<FriendRequest?> GetAsync(int senderId, int recipientId)
+        public async Task<bool> DeleteBySenderIdAsync(int senderId)
         {
-            return await _friendRequestRepository.GetAsync(senderId, recipientId);
+            bool isAnyRowAffected = await _friendRequestRepository.DeleteBySenderIdAsync(senderId);
+            DeleteByRecipientOrSenderIdAsync(senderId, isSender: true);
+            
+            return isAnyRowAffected;
         }
 
-        public async Task<IEnumerable<FriendRequest>> GetByRecipientAsync(int recipientId)
+        public async Task<bool> DeleteByUserId(int userId)
         {
-            return await _friendRequestRepository.GetByRecipientAsync(recipientId);
+            bool isAnyRowAffected1 = await DeleteBySenderIdAsync(userId);
+            bool isAnyRowAffected2 = await DeleteByRecipientIdAsync(userId);
+            
+            return isAnyRowAffected1 || isAnyRowAffected2;
         }
 
-        public async Task<IEnumerable<FriendRequest>> GetBySenderAsync(int senderId)
+        public async Task<FriendRequest?> GetAsync(FriendRequestDto friendRequestDto)
         {
-            return await _friendRequestRepository.GetBySenderAsync(senderId);
+            return await _friendRequestRepository.GetAsync(
+                friendRequestDto.SenderId
+                , friendRequestDto.RecipientId);
+        }
+
+        public async Task<IEnumerable<FriendRequest>> GetByRecipientIdAsync(int recipientId)
+        {
+            return await _friendRequestRepository.GetByRecipientIdAsync(recipientId);
+        }
+
+        public async Task<IEnumerable<FriendRequest>> GetBySenderIdAsync(int senderId)
+        {
+            return await _friendRequestRepository.GetBySenderIdAsync(senderId);
         }
     }
 }

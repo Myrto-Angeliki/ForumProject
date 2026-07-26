@@ -41,7 +41,7 @@ namespace ForumProject.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> DeleteByRecipientAsync(int recipientId)
+        public async Task<bool> DeleteByRecipientIdAsync(int recipientId)
         {
             using(var connection = _context.CreateConnection())
             {
@@ -54,7 +54,7 @@ namespace ForumProject.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> DeleteBySenderAsync(int senderId)
+        public async Task<bool> DeleteBySenderIdAsync(int senderId)
         {
             using(var connection = _context.CreateConnection())
             {
@@ -92,7 +92,7 @@ namespace ForumProject.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<FriendRequest>> GetByRecipientAsync(int recipientId)
+        public async Task<IEnumerable<FriendRequest>> GetByRecipientIdAsync(int recipientId)
         {
             using(var connection = _context.CreateConnection())
             {
@@ -105,7 +105,7 @@ namespace ForumProject.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<FriendRequest>> GetBySenderAsync(int senderId)
+        public async Task<IEnumerable<FriendRequest>> GetBySenderIdAsync(int senderId)
         {
             using(var connection = _context.CreateConnection())
             {
