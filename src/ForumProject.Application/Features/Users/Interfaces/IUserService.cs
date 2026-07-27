@@ -5,11 +5,11 @@ namespace ForumProject.Application.Features.Users.Interfaces
 {
     public interface IUserService
     {
-        Task<User?> GetByIdAsync(int userId);
-        Task<bool> UpdateUser(UpdateUserDto userDto);
-        Task<bool> DeleteUser(int userId);
-        Task<IEnumerable<User>> GetFriendsByIdAsync(int userId);
-        Task<bool> AddFriend(UpdateFriendDto addFriendDto);
+        Task<UserDto> GetByIdAsync(int userId);
+        Task<bool> UpdateUserAsync(UpdateUserDto userDto);
+        Task<bool> DeleteUserAsync(int userId);
+        Task<IEnumerable<UserDto>> GetFriendsByIdAsync(int userId);
+        Task<bool> AddFriendAsync(UpdateFriendDto addFriendDto);
         Task<bool> DeleteFriendAsync(UpdateFriendDto removeFriendDto);
     }
 }

@@ -27,31 +27,21 @@ namespace ForumProject.Application.Features.Users.Services
             {
                 cfg.CreateMap<UpdateUserDto, User>();
                 cfg.CreateMap<UpdateFriendDto, FriendRequestDto>();
+                cfg.CreateMap<User, UpdateUserDto>();
             }));
         }
 
         private async Task<bool> UpdateFriendship(UpdateFriendDto updateFriendDto)
         {
-            User? user = await _userRepository.GetByIdAsync(updateFriendDto.UserId);
-            User? friend = await _userRepository.GetByIdAsync(updateFriendDto.FriendId);
-            if(friend != null && user != null)
-            {
-                user.UpdateFriends(friend, updateFriendDto.Action);
-                if(updateFriendDto.Action == "add")
-                {
-                    return await _friendshipRepository.AddAsync(updateFriendDto.UserId
-                        , updateFriendDto.FriendId);
-                }
-                else
-                {
-                    return await _friendshipRepository.DeleteAsync(updateFriendDto.UserId
-                        , updateFriendDto.FriendId);
-                }
-            }
-            throw new Exception("Failed to remove friend!");
+            if(updateFriendDto.Action == "add")
+                return await _friendshipRepository.AddAsync(updateFriendDto.UserId
+                    , updateFriendDto.FriendId);
+            else
+                return await _friendshipRepository.DeleteAsync(updateFriendDto.UserId
+                    , updateFriendDto.FriendId);
         }
 
-        public async Task<bool> AddFriend(UpdateFriendDto addFriendDto)
+        public async Task<bool> AddFriendAsync(UpdateFriendDto addFriendDto)
         {
             addFriendDto.Action = "add";
             bool isAnyRowAffected1 = await UpdateFriendship(addFriendDto);
@@ -69,30 +59,29 @@ namespace ForumProject.Application.Features.Users.Services
             return await UpdateFriendship(removeFriendDto);
         }
 
-        public async Task<bool> DeleteUser(int userId)
+        public async Task<bool> DeleteUserAsync(int userId)
         {
             return await _userRepository.DeleteAsync(userId); 
         }
 
-        public async Task<IEnumerable<User>> GetFriendsByIdAsync(int userId)
+        public async Task<IEnumerable<UserDto>> GetFriendsByIdAsync(int userId)
         {
-            return await _friendshipRepository.GetByUserAsync(userId);
+            IEnumerable<User> friends = await _friendshipRepository.GetByUserAsync(userId);
+            return friends.Select(_mapper.Map<User, UserDto>);
         }
 
-        public async Task<bool> UpdateUser(UpdateUserDto userDto)
+        public async Task<bool> UpdateUserAsync(UpdateUserDto userDto)
         {
-            User userToUpdate = _mapper.Map<User>(userDto);
-            return await _userRepository.UpdateAsync(userToUpdate);
+            return await _userRepository.UpdateAsync(_mapper.Map<User>(userDto));
         }
 
-        public async Task<User?> GetByIdAsync(int userId)
+        public async Task<UserDto> GetByIdAsync(int userId)
         {
             User? user = await _userRepository.GetByIdAsync(userId);
             
             if(user != null)
-            {
-                return user;
-            }
+                return _mapper.Map<UserDto>(user);
+
             throw new Exception("User not found!");
         }
     }
