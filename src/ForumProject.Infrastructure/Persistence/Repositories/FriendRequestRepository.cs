@@ -3,6 +3,7 @@ using Dapper;
 using ForumProject.Domain.Entities;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
 using ForumProject.Infrastructure.Persistence;
+using Microsoft.VisualBasic;
 
 namespace ForumProject.Infrastructure.Repositories
 {
@@ -67,55 +68,64 @@ namespace ForumProject.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<FriendRequest>> GetAllAsync()
+        private async Task<IEnumerable<FriendRequest>> ExecuteGetQuery(
+            int? senderId = null, int? recipientId = null)
         {
             using(var connection = _context.CreateConnection())
             {
-                IEnumerable<FriendRequest> allFriendRequests = await connection.QueryAsync<FriendRequest>(
-                    "ForumAppSchema.spFriendRequest_Get"
-                    , commandType: CommandType.StoredProcedure
-                );
-                return allFriendRequests;
+                IEnumerable<FriendRequest> friendRequests = await connection
+                        .QueryAsync<FriendRequest, User, User, FriendRequest>(
+                        "ForumAppSchema.spFriendRequest_Get"
+                        , (friendRequestRetrieved, sender, recipient) =>
+                        {
+                            friendRequestRetrieved.Sender = sender;
+                            friendRequestRetrieved.Recipient = recipient;
+                            return friendRequestRetrieved;
+
+                        }
+                        , new {SenderId = senderId, RecipientId = recipientId}
+                        , splitOn: "SenderUId, RecipientUId"
+                        , commandType: CommandType.StoredProcedure
+                    );
+                return friendRequests;
             }
         }
 
+        public async Task<IEnumerable<FriendRequest>> GetAllAsync()
+        {
+            IEnumerable<FriendRequest> allFriendRequests = await ExecuteGetQuery();
+            return allFriendRequests;
+        }
+
+        
+
         public async Task<FriendRequest?> GetAsync(int senderId, int recipientId)
         {
-            using(var connection = _context.CreateConnection())
-            {
-                FriendRequest? friendRequest = await connection.QuerySingleAsync<FriendRequest>(
-                    "ForumAppSchema.spFriendRequest_Get"
-                    , new {SenderId = senderId, RecipientId = recipientId}
-                    , commandType: CommandType.StoredProcedure
-                );
-                return friendRequest;
-            }
+            IEnumerable<FriendRequest> friendRequests = await ExecuteGetQuery(
+                senderId
+                , recipientId
+            );
+
+            if(friendRequests.Count() <= 1)
+                return friendRequests.ToList().FirstOrDefault();
+            throw new Exception(@"Unexpected behaviour from FriendRequest entity. "+
+                "There cannot be many friend requests for the same user and sender");
         }
 
         public async Task<IEnumerable<FriendRequest>> GetByRecipientIdAsync(int recipientId)
         {
-            using(var connection = _context.CreateConnection())
-            {
-                IEnumerable<FriendRequest> recipientFriendRquests = await connection.QueryAsync<FriendRequest>(
-                    "ForumAppSchema.spFriendRequest_Get"
-                    , new {RecipientId = recipientId}
-                    , commandType: CommandType.StoredProcedure
+                IEnumerable<FriendRequest> recipientFriendRquests = await ExecuteGetQuery(
+                    recipientId: recipientId
                 );
                 return recipientFriendRquests;
-            }
         }
 
         public async Task<IEnumerable<FriendRequest>> GetBySenderIdAsync(int senderId)
         {
-            using(var connection = _context.CreateConnection())
-            {
-                IEnumerable<FriendRequest> senderFriendRquests = await connection.QueryAsync<FriendRequest>(
-                    "ForumAppSchema.spFriendRequest_Get"
-                    , new {SenderId = senderId}
-                    , commandType: CommandType.StoredProcedure
+                IEnumerable<FriendRequest> senderFriendRquests = await ExecuteGetQuery(
+                    senderId: senderId
                 );
                 return senderFriendRquests;
-            }
         }
     }
 }

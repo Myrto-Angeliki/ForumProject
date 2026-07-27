@@ -84,7 +84,7 @@ namespace ForumProject.Domain.Entities
         }
 
         
-        public void SendFriendRequest(User recipient)
+        public void CheckIfFriendRequestExists(User recipient)
         {
             
             FriendRequest? friendRequestFromRecipient = FriendRequest.FindFriendRequest(
@@ -94,24 +94,22 @@ namespace ForumProject.Domain.Entities
                 throw new Exception(@"Failed to send friend request. 
                     User" + recipient.Username + " has already sent you a friend request.");
             }
-            
-            FriendRequest newFriendRequest = new FriendRequest(this, recipient);
-            newFriendRequest.UpdateUserFriendRequestLists("Add");
+
         }
 
-        public void HandleReceivedFriendRequest(User sender, string action)
-        {
-            FriendRequest? friendRequest = FriendRequest.FindFriendRequest(
-                sender, this, this.FriendRequestsReceived
-            );
-            if(friendRequest != null)
-            {
-                friendRequest.UpdateUserFriendRequestLists("remove");
-                if(action == "accept")
-                    UpdateFriends(sender, "add");
-            }
-            throw new Exception("Friend Request not found.");
-        }
+        // public void HandleReceivedFriendRequest(User sender, string action)
+        // {
+        //     FriendRequest? friendRequest = FriendRequest.FindFriendRequest(
+        //         sender, this, this.FriendRequestsReceived
+        //     );
+        //     if(friendRequest != null)
+        //     {
+        //         friendRequest.UpdateUserFriendRequestLists("remove");
+        //         if(action == "accept")
+        //             UpdateFriends(sender, "add");
+        //     }
+        //     throw new Exception("Friend Request not found.");
+        // }
 
         public void UpdateUserAcitvity(bool isDeactivation)
         {

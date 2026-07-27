@@ -1,10 +1,11 @@
 using ForumProject.Application.Features.Posts.DTOs;
 using ForumProject.Application.Features.Posts.Interfaces;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumProject.Api.Controllers
 {
+    //[Authorize]
     [ApiController]
     [Route("/")]
     public class PostController : ControllerBase

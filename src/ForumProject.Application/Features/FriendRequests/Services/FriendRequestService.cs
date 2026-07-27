@@ -32,6 +32,7 @@ namespace ForumProject.Application.Features.FriendRequests.Services
 
         public async Task<bool> AddAsync(FriendRequestDto friendRequestDto)
         {
+            
             bool isAnyRowAffected = await _friendRequestRepository.AddAsync(
                 friendRequestDto.SenderId
                 , friendRequestDto.RecipientId);

@@ -5,6 +5,7 @@ namespace ForumProject.Application.Features.Users.Interfaces
 {
     public interface IUserService
     {
+        Task<User?> GetByIdAsync(int userId);
         Task<bool> UpdateUser(UpdateUserDto userDto);
         Task<bool> DeleteUser(int userId);
         Task<IEnumerable<User>> GetFriendsByIdAsync(int userId);

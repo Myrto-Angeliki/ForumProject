@@ -4,11 +4,8 @@ namespace ForumProject.Domain.Entities
 {
     public class FriendRequest
     {
-        private readonly User _sender;
-        public User Sender => _sender;
-
-        private readonly User _recipient;
-        public User Recipient => _recipient;
+        public User Sender { get; set; }
+        public User Recipient { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
@@ -16,8 +13,8 @@ namespace ForumProject.Domain.Entities
 
         public FriendRequest(User sender, User recipient)
         {
-            _sender = sender;
-            _recipient = recipient;
+            Sender = sender;
+            Recipient = recipient;
         }
 
         public void UpdateUserFriendRequestLists(string action)
@@ -33,7 +30,7 @@ namespace ForumProject.Domain.Entities
                 this.Recipient.FriendRequestsReceived.Remove(this);
             }
             else
-                throw new Exception("Unsupported acition " + action + "!");
+                throw new Exception("Unsupported action " + action + "!");
             
             this.Sender.UpdatedAt = DateTime.UtcNow;
             this.Recipient.UpdatedAt = DateTime.UtcNow;
