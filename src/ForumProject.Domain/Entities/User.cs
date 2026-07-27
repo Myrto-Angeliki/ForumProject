@@ -83,6 +83,13 @@ namespace ForumProject.Domain.Entities
             topic.UpdatedAt = DateTime.UtcNow;
         }
 
+        public void EmptyFriendRequestsList(bool isSender)
+        {
+            if(isSender)
+                    FriendRequestsSent = new();
+                else 
+                    FriendRequestsReceived = new();
+        }
         
         public void CheckIfFriendRequestExists(User recipient)
         {

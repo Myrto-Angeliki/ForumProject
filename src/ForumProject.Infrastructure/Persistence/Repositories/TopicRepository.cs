@@ -52,7 +52,7 @@ namespace ForumProject.Infrastructure.Repositories
         {
             using(var connection = _context.CreateConnection())
             {
-                Topic? topic = await connection.QuerySingleAsync<Topic>(
+                Topic? topic = await connection.QuerySingleOrDefaultAsync<Topic>(
                                             "ForumAppSchema.spTopic_Get"
                                             , new {TopicId = topicId}
                                             , commandType: CommandType.StoredProcedure);
@@ -60,7 +60,7 @@ namespace ForumProject.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<Topic>> GetByPostAsync(int postId)
+        public async Task<IEnumerable<Topic>> GetByPostIdAsync(int postId)
         {
             using(var connection = _context.CreateConnection())
             {
@@ -72,7 +72,7 @@ namespace ForumProject.Infrastructure.Repositories
             }
         }
 
-        public async Task<IEnumerable<Topic>> GetByUserAsync(int userId)
+        public async Task<IEnumerable<Topic>> GetByUserIdAsync(int userId)
         {
             using(var connection = _context.CreateConnection())
             {
@@ -82,6 +82,30 @@ namespace ForumProject.Infrastructure.Repositories
                                             , commandType: CommandType.StoredProcedure);
                 return topic;
             }
+        }
+
+        private async Task<IEnumerable<T>> GetPostsOrUsersByTopicIdAsync<T>(string sp, int topicId)
+        {
+            using(var connection = _context.CreateConnection())
+            {
+                IEnumerable<T> postsOrUsers = await connection.QueryAsync<T>(
+                                            sp
+                                            , new {TopicId = topicId}
+                                            , commandType: CommandType.StoredProcedure);
+                return postsOrUsers;
+            }
+        }
+
+        public async Task<IEnumerable<Post>> GetPostsByTopicIdAsync(int topicId)
+        {
+            return await GetPostsOrUsersByTopicIdAsync<Post>(
+                "ForumAppSchema.spTopic_GetPosts", topicId);
+        }
+
+        public async Task<IEnumerable<User>> GetUsersByTopicIdAsync(int topicId)
+        {
+            return await GetPostsOrUsersByTopicIdAsync<User>(
+                "ForumAppSchema.spTopic_GetUsers", topicId);
         }
 
         public async Task<bool> UpdateAsync(Topic topic)

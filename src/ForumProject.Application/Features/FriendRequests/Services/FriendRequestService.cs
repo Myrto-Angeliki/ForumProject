@@ -53,16 +53,11 @@ namespace ForumProject.Application.Features.FriendRequests.Services
             return isAnyRowAffected;
         }
 
-        private async void DeleteByRecipientOrSenderIdAsync(int userId, bool isSender)
+        private async void EmptyFriendRequestsListAsync(int userId, bool isSender)
         {
             User? user = await _userRepository.GetByIdAsync(userId);
             if(user != null)
-            {
-                if(isSender)
-                    user.FriendRequestsSent = new();
-                else 
-                    user.FriendRequestsReceived = new();
-            }
+                user.EmptyFriendRequestsList(isSender);
             else
                 throw new Exception("User not found!");
         }
@@ -70,7 +65,7 @@ namespace ForumProject.Application.Features.FriendRequests.Services
         public async Task<bool> DeleteByRecipientIdAsync(int recipientId)
         {
             bool isAnyRowAffected = await _friendRequestRepository.DeleteByRecipientIdAsync(recipientId);
-            DeleteByRecipientOrSenderIdAsync(recipientId, isSender: false);
+            EmptyFriendRequestsListAsync(recipientId, isSender: false);
             
             return isAnyRowAffected;
         }
@@ -78,7 +73,7 @@ namespace ForumProject.Application.Features.FriendRequests.Services
         public async Task<bool> DeleteBySenderIdAsync(int senderId)
         {
             bool isAnyRowAffected = await _friendRequestRepository.DeleteBySenderIdAsync(senderId);
-            DeleteByRecipientOrSenderIdAsync(senderId, isSender: true);
+            EmptyFriendRequestsListAsync(senderId, isSender: true);
             
             return isAnyRowAffected;
         }
