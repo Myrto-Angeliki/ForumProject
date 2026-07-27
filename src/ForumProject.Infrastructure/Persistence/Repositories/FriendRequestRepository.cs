@@ -29,7 +29,7 @@ namespace ForumProject.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> DeleteAsync(int senderId, int recipientId)
+        private async Task<bool> ExecuteDelete(int? senderId = null, int? recipientId = null)
         {
             using(var connection = _context.CreateConnection())
             {
@@ -42,30 +42,19 @@ namespace ForumProject.Infrastructure.Repositories
             }
         }
 
+        public async Task<bool> DeleteAsync(int senderId, int recipientId)
+        {
+            return await ExecuteDelete(senderId, recipientId);
+        }
+
         public async Task<bool> DeleteByRecipientIdAsync(int recipientId)
         {
-            using(var connection = _context.CreateConnection())
-            {
-                var rowsAffected = await connection.ExecuteAsync(
-                                    "ForumAppSchema.spFriendRequest_Delete"
-                                    , new {RecipientId = recipientId}
-                                    , commandType: CommandType.StoredProcedure
-                );
-                return rowsAffected > 0;
-            }
+            return await ExecuteDelete(recipientId: recipientId);
         }
 
         public async Task<bool> DeleteBySenderIdAsync(int senderId)
         {
-            using(var connection = _context.CreateConnection())
-            {
-                var rowsAffected = await connection.ExecuteAsync(
-                                    "ForumAppSchema.spFriendRequest_Delete"
-                                    , new {SenderId = senderId}
-                                    , commandType: CommandType.StoredProcedure
-                );
-                return rowsAffected > 0;
-            }
+            return await ExecuteDelete(senderId: senderId);
         }
 
         private async Task<IEnumerable<FriendRequest>> ExecuteGetQuery(

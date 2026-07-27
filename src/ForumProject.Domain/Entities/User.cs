@@ -17,92 +17,92 @@ namespace ForumProject.Domain.Entities
         public DateTime? DeactivatedAt { get; set; }
 
 
-        public void UpdatePosts(Post post, string action)
-        {
-            if(action.ToLower() == "add")
-                Posts.Add(post);
-            else if(action.ToLower() == "remove")
-                Posts.Remove(post);
-            else
-                throw new Exception("Invalid action: " 
-                        + action + ".");
+        // public void UpdatePosts(Post post, string action)
+        // {
+        //     if(action.ToLower() == "add")
+        //         Posts.Add(post);
+        //     else if(action.ToLower() == "remove")
+        //         Posts.Remove(post);
+        //     else
+        //         throw new Exception("Invalid action: " 
+        //                 + action + ".");
 
-            UpdatedAt = DateTime.UtcNow;
-        }
+        //     UpdatedAt = DateTime.UtcNow;
+        // }
 
-        public void UpdateComments(Comment comment, string action)
-        {
-            if(action.ToLower() == "add")
-                Comments.Add(comment);
-            else if(action.ToLower() == "remove")
-                Comments.Remove(comment);
-            else
-                throw new Exception("Invalid action: " 
-                        + action + ".");
+        // public void UpdateComments(Comment comment, string action)
+        // {
+        //     if(action.ToLower() == "add")
+        //         Comments.Add(comment);
+        //     else if(action.ToLower() == "remove")
+        //         Comments.Remove(comment);
+        //     else
+        //         throw new Exception("Invalid action: " 
+        //                 + action + ".");
 
-            UpdatedAt = DateTime.UtcNow;
-        }
+        //     UpdatedAt = DateTime.UtcNow;
+        // }
 
-        public void UpdateFriends(User friend, string action)
-        {
-            if(action.ToLower() == "add")
-            {
-                this.Friends.Add(friend);
-                friend.Friends.Add(this);
-            }
-            else if(action.ToLower() == "remove")
-            {
-                this.Friends.Remove(friend);
-                friend.Friends.Remove(this);
-            }
-            else
-                throw new Exception("Invalid action: " 
-                        + action + ".");
+        // public void UpdateFriends(User friend, string action)
+        // {
+        //     if(action.ToLower() == "add")
+        //     {
+        //         this.Friends.Add(friend);
+        //         friend.Friends.Add(this);
+        //     }
+        //     else if(action.ToLower() == "remove")
+        //     {
+        //         this.Friends.Remove(friend);
+        //         friend.Friends.Remove(this);
+        //     }
+        //     else
+        //         throw new Exception("Invalid action: " 
+        //                 + action + ".");
 
-            this.UpdatedAt = DateTime.UtcNow;
-            friend.UpdatedAt = DateTime.UtcNow;
-        }
+        //     this.UpdatedAt = DateTime.UtcNow;
+        //     friend.UpdatedAt = DateTime.UtcNow;
+        // }
 
-        public void UpdateTopics(Topic topic, string action)
-        {
-            if(action.ToLower() == "add")
-            {
-                FollowingTopics.Add(topic);
-                topic.UsersFollowingTopic.Add(this);
-            }
-            else if(action.ToLower() == "remove")
-            {
-                FollowingTopics.Remove(topic);
-                topic.UsersFollowingTopic.Remove(this);
-            }
-            else
-                throw new Exception("Cannot update following topics with action: " 
-                        + action + ".");
+        // public void UpdateTopics(Topic topic, string action)
+        // {
+        //     if(action.ToLower() == "add")
+        //     {
+        //         FollowingTopics.Add(topic);
+        //         topic.UsersFollowingTopic.Add(this);
+        //     }
+        //     else if(action.ToLower() == "remove")
+        //     {
+        //         FollowingTopics.Remove(topic);
+        //         topic.UsersFollowingTopic.Remove(this);
+        //     }
+        //     else
+        //         throw new Exception("Cannot update following topics with action: " 
+        //                 + action + ".");
 
-            UpdatedAt = DateTime.UtcNow;
-            topic.UpdatedAt = DateTime.UtcNow;
-        }
+        //     UpdatedAt = DateTime.UtcNow;
+        //     topic.UpdatedAt = DateTime.UtcNow;
+        // }
 
-        public void EmptyFriendRequestsList(bool isSender)
-        {
-            if(isSender)
-                    FriendRequestsSent = new();
-                else 
-                    FriendRequestsReceived = new();
-        }
+        // public void EmptyFriendRequestsList(bool isSender)
+        // {
+        //     if(isSender)
+        //             FriendRequestsSent = new();
+        //         else 
+        //             FriendRequestsReceived = new();
+        // }
         
-        public void CheckIfFriendRequestExists(User recipient)
-        {
+        // public void CheckIfFriendRequestExists(User recipient)
+        // {
             
-            FriendRequest? friendRequestFromRecipient = FriendRequest.FindFriendRequest(
-                sender: recipient, recipient: this, recipient.FriendRequestsSent);
-            if (friendRequestFromRecipient != null)
-            {
-                throw new Exception(@"Failed to send friend request. 
-                    User" + recipient.Username + " has already sent you a friend request.");
-            }
+        //     FriendRequest? friendRequestFromRecipient = FriendRequest.FindFriendRequest(
+        //         sender: recipient, recipient: this, recipient.FriendRequestsSent);
+        //     if (friendRequestFromRecipient != null)
+        //     {
+        //         throw new Exception(@"Failed to send friend request. 
+        //             User" + recipient.Username + " has already sent you a friend request.");
+        //     }
 
-        }
+        // }
 
         // public void HandleReceivedFriendRequest(User sender, string action)
         // {
