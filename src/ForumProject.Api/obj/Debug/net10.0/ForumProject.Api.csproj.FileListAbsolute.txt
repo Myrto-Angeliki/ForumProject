@@ -74,3 +74,4 @@ C:\Users\user\source\repos\ForumProject\src\ForumProject.Api\obj\Debug\net10.0\F
 C:\Users\user\source\repos\ForumProject\src\ForumProject.Api\obj\Debug\net10.0\ForumProject.Api.genruntimeconfig.cache
 C:\Users\user\source\repos\ForumProject\src\ForumProject.Api\obj\Debug\net10.0\ref\ForumProject.Api.dll
 C:\Users\user\source\repos\ForumProject\src\ForumProject.Api\bin\Debug\net10.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\user\source\repos\ForumProject\src\ForumProject.Api\bin\Debug\net10.0\AutoMapper.dll

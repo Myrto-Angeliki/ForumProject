@@ -18,6 +18,14 @@
           "ForumProject.Api.dll": {}
         }
       },
+      "AutoMapper/14.0.0": {
+        "runtime": {
+          "lib/net8.0/AutoMapper.dll": {
+            "assemblyVersion": "14.0.0.0",
+            "fileVersion": "14.0.0.0"
+          }
+        }
+      },
       "Dapper/2.1.79": {
         "runtime": {
           "lib/net10.0/Dapper.dll": {
@@ -318,7 +326,9 @@
       },
       "ForumProject.Application/1.0.0": {
         "dependencies": {
-          "ForumProject.Domain": "1.0.0"
+          "AutoMapper": "14.0.0",
+          "ForumProject.Domain": "1.0.0",
+          "Microsoft.AspNetCore.Authentication.JwtBearer": "10.0.10"
         },
         "runtime": {
           "ForumProject.Application.dll": {
@@ -355,6 +365,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "AutoMapper/14.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OC+1neAPM4oCCqQj3g2GJ2shziNNhOkxmNB9cVS8jtx4JbgmRzLcUOxB9Tsz6cVPHugdkHgCaCrTjjSI0Z5sCQ==",
+      "path": "automapper/14.0.0",
+      "hashPath": "automapper.14.0.0.nupkg.sha512"
     },
     "Dapper/2.1.79": {
       "type": "package",

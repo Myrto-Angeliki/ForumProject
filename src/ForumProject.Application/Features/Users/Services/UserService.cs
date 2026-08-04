@@ -5,7 +5,6 @@ using ForumProject.Application.Features.Friendships.Interfaces;
 using ForumProject.Application.Features.Users.DTOs;
 using ForumProject.Application.Features.Users.Interfaces;
 using ForumProject.Domain.Entities;
-using Microsoft.Extensions.Logging;
 
 namespace ForumProject.Application.Features.Users.Services
 {
@@ -28,6 +27,7 @@ namespace ForumProject.Application.Features.Users.Services
                 cfg.CreateMap<UpdateUserDto, User>();
                 cfg.CreateMap<UpdateFriendDto, FriendRequestDto>();
                 cfg.CreateMap<User, UpdateUserDto>();
+                cfg.CreateMap<User, UserDto>();
             }));
         }
 
@@ -83,6 +83,12 @@ namespace ForumProject.Application.Features.Users.Services
                 return _mapper.Map<UserDto>(user);
 
             throw new Exception("User not found!");
+        }
+
+        public async Task<IEnumerable<UserDto>> GetAll()
+        {
+            IEnumerable<User> users = await _userRepository.GetAllAsync();
+            return users.Select(_mapper.Map<User, UserDto>);
         }
     }
 }

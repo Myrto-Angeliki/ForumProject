@@ -76,7 +76,7 @@ namespace ForumProject.Application.Features.Auths.Services
                         User userToRegister = new User
                         {
                             Email = registrationDto.Email,
-                            Username = registrationDto.Email
+                            Username = registrationDto.Username
                         };
                         bool wasAddSuccessful = await _userRepository.AddAsync(userToRegister);
 

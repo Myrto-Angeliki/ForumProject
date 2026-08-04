@@ -16,6 +16,13 @@ namespace ForumProject.Api.Controllers
             _userService = userService;
         }
 
+        [HttpGet("all-users")]
+        public async Task<IEnumerable<UserDto>> GetUsers()
+        {
+            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
+            return await _userService.GetAll();
+        }
+
         [HttpGet("/{userId}/profile")]
         public async Task<UserDto> GetUser(int userId)
         {

@@ -14,7 +14,7 @@ namespace ForumProject.Application.Features.Auths.Services
     {
         private IConfiguration _config;
 
-        public AuthServiceHelper(IConfiguration config, IAuthRepository authRepository)
+        public AuthServiceHelper(IConfiguration config)
         {
             _config = config;
         }
@@ -67,7 +67,8 @@ namespace ForumProject.Application.Features.Auths.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public async Task<bool> setPassword(LoginDto userForSetPassword, IAuthRepository authRepository)
+        public async Task<bool> setPassword(LoginDto userForSetPassword
+            , IAuthRepository authRepository)
         {
             byte[] passwordSalt = new byte[128 / 8];
             using(RandomNumberGenerator rng = RandomNumberGenerator.Create())

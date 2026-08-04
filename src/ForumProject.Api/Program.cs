@@ -1,14 +1,24 @@
 using ForumProject.Infrastructure;
 using ForumProject.Application;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using ForumProject.Api.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddApplication();
+builder.Services.AddApplication(builder.Configuration);
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = AuthenticationHelper
+        .GetTokenValidationParameters(builder.Configuration
+            .GetSection("AppSettings:TokenKey").Value);
+});
 
 builder.Services.AddCors((options) =>
     {
