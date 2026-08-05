@@ -10,11 +10,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ForumProject.Application.Features.Auths.Services
 {
-    public class AuthServiceHelper
+    public class AuthHelperService
     {
         private IConfiguration _config;
 
-        public AuthServiceHelper(IConfiguration config)
+        public AuthHelperService(IConfiguration config)
         {
             _config = config;
         }

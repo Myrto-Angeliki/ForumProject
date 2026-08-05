@@ -19,7 +19,7 @@ namespace ForumProject.Application
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddSingleton(new AuthServiceHelper(configuration));
+            services.AddSingleton(new AuthHelperService(configuration));
             
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IPostService, PostService>();

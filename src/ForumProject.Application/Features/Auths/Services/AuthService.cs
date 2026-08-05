@@ -9,19 +9,19 @@ namespace ForumProject.Application.Features.Auths.Services
     {
         private readonly IAuthRepository _authRepository;
         private readonly IUserRepository _userRepository;
-        private readonly AuthServiceHelper _authServiceHelper;
+        private readonly AuthHelperService _authHelperService;
 
         public AuthService(IAuthRepository authRepository, IUserRepository userRepository
-            , AuthServiceHelper authServiceHelper)
+            , AuthHelperService authHelperService)
         {
             _authRepository = authRepository;
             _userRepository = userRepository;
-            _authServiceHelper = authServiceHelper;
+            _authHelperService = authHelperService;
         }
 
         public async Task<bool> ChangePasswordAsync(LoginDto userForPasswordChange)
         {
-            if(await _authServiceHelper.setPassword(userForPasswordChange, _authRepository))
+            if(await _authHelperService.setPassword(userForPasswordChange, _authRepository))
             {
                 return true;
             }
@@ -35,7 +35,7 @@ namespace ForumProject.Application.Features.Auths.Services
 
             if (userForConfirmation != null)
             {
-                byte[] passwordHash = _authServiceHelper.GetPasswordHash(userForLogin.Password
+                byte[] passwordHash = _authHelperService.GetPasswordHash(userForLogin.Password
                                         , userForConfirmation.PasswordSalt);
 
                 for (int index = 0; index < passwordHash.Length; index++)
@@ -51,7 +51,7 @@ namespace ForumProject.Application.Features.Auths.Services
                 {
                     return new Dictionary<string, string>
                     {
-                        {"token", _authServiceHelper.CreateToken(loggedInUser.UserId)}
+                        {"token", _authHelperService.CreateToken(loggedInUser.UserId)}
                     };
                 }
                 throw new Exception("User not found with email: " + userForLogin.Email);
@@ -71,7 +71,7 @@ namespace ForumProject.Application.Features.Auths.Services
                         Email = registrationDto.Email,
                         Password = registrationDto.Password
                     };
-                    if (await _authServiceHelper.setPassword(userForSetPassword, _authRepository))
+                    if (await _authHelperService.setPassword(userForSetPassword, _authRepository))
                     {
                         User userToRegister = new User
                         {
