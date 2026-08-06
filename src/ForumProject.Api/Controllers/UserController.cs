@@ -41,10 +41,28 @@ namespace ForumProject.Api.Controllers
             return await _userService.GetByUsernameAsync(username);
         }
 
+        [HttpGet("get-friends/{userId}/")]
         public async Task<IEnumerable<UserDto>> GetUserFriends(int userId)
         {
             //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
             return await _userService.GetFriendsByIdAsync(userId);
+        }
+
+        [HttpPut("/activate-user/{userId}/")]
+        public async Task<IActionResult> ActivateUser(int userId)
+        {
+            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
+            UpdateUserDto userToActivate = new UpdateUserDto
+            {
+                UserId = userId,
+                IsActive = true,
+                DeactivatedAt = null
+            };
+            
+            bool result = await _userService.UpdateUserAsync(userToActivate);
+            if(result)
+                return Ok();
+            throw new Exception("Failed to deactivate user!");
         }
 
         [HttpPut("/deactivate-user/{userId}/")]
@@ -64,6 +82,36 @@ namespace ForumProject.Api.Controllers
             throw new Exception("Failed to deactivate user!");
         }
 
+        [HttpPut("/update-email/{userId}/{email}")]
+        public async Task<IActionResult> UpdateEmail(int userId, string email)
+        {
+            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
+            UpdateUserDto updateEmail = new UpdateUserDto
+            {
+                UserId = userId,
+                Email = email
+            };
+            bool result = await _userService.UpdateUserAsync(updateEmail);
+            if(result)
+                return Ok();
+            throw new Exception("Failed to update email!");
+        }
+
+        [HttpPut("/update-username/{userId}/{username}")]
+        public async Task<IActionResult> UpdateUsername(int userId, string username)
+        {
+            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
+            UpdateUserDto updateUsername = new UpdateUserDto
+            {
+                UserId = userId,
+                Username = username
+            };
+            bool result = await _userService.UpdateUserAsync(updateUsername);
+            if(result)
+                return Ok();
+            throw new Exception("Failed to update username!");
+        }
+
         [HttpPut("/accept-friend-request")]
         public async Task<IActionResult> AcceptFriendRequest(UpdateFriendDto addFriendDto)
         {
@@ -77,15 +125,6 @@ namespace ForumProject.Api.Controllers
         public async Task<IActionResult> RemoveFriend(UpdateFriendDto removeFriendDto)
         {
             bool result = await _userService.DeleteFriendAsync(removeFriendDto);
-            if(result)
-                return Ok();
-            throw new Exception("Failed to remove friend!");
-        }
-
-        [HttpPut("/update-user")]
-        public async Task<IActionResult> UpdateUser(UpdateUserDto updateUserDto)
-        {
-            bool result = await _userService.UpdateUserAsync(updateUserDto);
             if(result)
                 return Ok();
             throw new Exception("Failed to remove friend!");

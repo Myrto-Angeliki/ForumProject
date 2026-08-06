@@ -38,7 +38,7 @@ BEGIN
             @UserIdParam = @UserId, @NewEmailParam = @Email;
 
         UPDATE ForumAppSchema.Users
-            SET IsActive = @IsActive,
+            SET IsActive = ISNULL(@IsActive, IsActive),
                 UpdatedAt = SYSUTCDATETIME(),
                 DeactivatedAt = @DeactivatedAt
             WHERE UserId = @UserId
