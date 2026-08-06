@@ -1,3 +1,4 @@
+using System.Drawing;
 using AutoMapper;
 using ForumProject.Application.Features.FriendRequests.DTOs;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
@@ -75,9 +76,24 @@ namespace ForumProject.Application.Features.Users.Services
             return await _userRepository.UpdateAsync(_mapper.Map<User>(userDto));
         }
 
-        public async Task<UserDto> GetByIdAsync(int userId)
+        public async Task<IEnumerable<UserDto>> GetAll()
         {
-            User? user = await _userRepository.GetByIdAsync(userId);
+            IEnumerable<User> users = await _userRepository.GetAllAsync();
+            return users.Select(_mapper.Map<User, UserDto>);
+        }
+
+        private async Task<UserDto> GetUserByOption(
+            string option, int userId=0, string usernameOrEmail="")
+        {
+            User? user;
+            if(option == "id")
+                user = await _userRepository.GetByIdAsync(userId);
+            else if(option == "email")
+                user = await _userRepository.GetByEmailAsync(usernameOrEmail);
+            else if(option == "username")
+                user = await _userRepository.GetByUsernameAsync(usernameOrEmail);
+            else
+                throw new Exception("invalid option: "+option);
             
             if(user != null)
                 return _mapper.Map<UserDto>(user);
@@ -85,10 +101,19 @@ namespace ForumProject.Application.Features.Users.Services
             throw new Exception("User not found!");
         }
 
-        public async Task<IEnumerable<UserDto>> GetAll()
+        public async Task<UserDto> GetByIdAsync(int userId)
         {
-            IEnumerable<User> users = await _userRepository.GetAllAsync();
-            return users.Select(_mapper.Map<User, UserDto>);
+            return await GetUserByOption(option: "id", userId);
+        }
+
+        public async Task<UserDto> GetByEmailAsync(string email)
+        {
+            return await GetUserByOption(option: "email", usernameOrEmail: email);
+        }
+
+        public async Task<UserDto> GetByUsernameAsync(string username)
+        {
+            return await GetUserByOption(option: "username", usernameOrEmail: username);
         }
     }
 }

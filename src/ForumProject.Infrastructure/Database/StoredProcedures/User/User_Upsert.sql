@@ -1,6 +1,6 @@
 CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_Upsert
     @Username NVARCHAR(50) = NULL,
-    @Email NVARCHAR(50),
+    @Email NVARCHAR(50) = NULL,
     @IsActive BIT = 1,
     @DeactivatedAt DATETIME2 = NULL,
     @UserId INT = NULL 
@@ -8,8 +8,10 @@ AS
 BEGIN
     IF NOT EXISTS(SELECT * FROM ForumAppSchema.Users WHERE UserId = @UserId)
     BEGIN
-        IF NOT EXISTS (SELECT * FROM ForumAppSchema.Users WHERE Email = @Email) AND
-            NOT EXISTS (SELECT * FROM ForumAppSchema.Users WHERE Username = @Username)
+        IF NOT EXISTS (SELECT * FROM ForumAppSchema.Users 
+            WHERE Email = ISNULL(@Email, Email)) AND
+                NOT EXISTS (SELECT * FROM ForumAppSchema.Users 
+                    WHERE Username = ISNULL(@Username, Username))
         BEGIN
 
             INSERT INTO ForumAppSchema.Users (
@@ -29,16 +31,60 @@ BEGIN
     END
     ELSE
     BEGIN
+        EXEC ForumAppSchema.spUser_UpdateUsername 
+            @UserIdParam = @UserId, @UsernameParam = @Username;
+
+        EXEC ForumAppSchema.spUser_UpdateEmail
+            @UserIdParam = @UserId, @NewEmailParam = @Email;
+
         UPDATE ForumAppSchema.Users
-            SET Username = @Username,
-                Email = @Email,
-                IsActive = @IsActive,
+            SET IsActive = @IsActive,
                 UpdatedAt = SYSUTCDATETIME(),
                 DeactivatedAt = @DeactivatedAt
             WHERE UserId = @UserId
     END
 END
 GO
+
+CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_UpdateUsername
+    @UserIdParam INT,
+    @UsernameParam NVARCHAR(50)
+AS
+BEGIN
+    IF NOT EXISTS (SELECT * FROM ForumAppSchema.Users 
+        WHERE Username = ISNULL(@UsernameParam, Username))
+    BEGIN
+        UPDATE ForumAppSchema.Users
+        SET Username = @UsernameParam
+        WHERE UserId = @UserIdParam
+    END
+END
+GO
+
+CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_UpdateEmail
+    @UserIdParam INT,
+    @NewEmailParam NVARCHAR(50)
+AS
+BEGIN
+    DECLARE @EmailToUpdate NVARCHAR(50);
+
+    IF NOT EXISTS (SELECT * FROM ForumAppSchema.Users 
+        WHERE Email = ISNULL(@NewEmailParam, Email))
+    BEGIN
+        SELECT  @EmailToUpdate = Users.Email
+            FROM  ForumAppSchema.Users AS Users
+        WHERE  Users.UserId = @UserIdParam
+
+        UPDATE ForumAppSchema.Users
+        SET Email = @NewEmailParam
+        WHERE UserId = @UserIdParam
+
+        EXEC ForumAppSchema.spAuth_UpdateEmail
+            @CurrentEmail = @EmailToUpdate, @NewEmail = @NewEmailParam;
+    END
+END
+GO
+
 
 CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_UpsertPost
     @PostToUpsertUserId INT,
@@ -163,7 +209,7 @@ BEGIN
 END
 GO
 
-CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_UnollowTopic
+CREATE OR ALTER PROCEDURE ForumAppSchema.spUser_UnfollowTopic
     @FollowerId INT,
     @TopicToUnfollowId INT
 AS

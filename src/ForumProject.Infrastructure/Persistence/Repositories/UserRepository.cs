@@ -20,8 +20,9 @@ namespace ForumProject.Infrastructure.Repositories
             using(var connection = _context.CreateConnection())
             {
                 var userParams = new {Email = user.Email, Username = user.Username};
-                int rowsAffected = await connection.ExecuteAsync("ForumAppSchema.spUser_Upsert", userParams
-                                            , commandType: CommandType.StoredProcedure);
+                int rowsAffected = await connection.ExecuteAsync("ForumAppSchema.spUser_Upsert"
+                                        , userParams
+                                        , commandType: CommandType.StoredProcedure);
                 return rowsAffected > 0;
             }
             
@@ -32,8 +33,9 @@ namespace ForumProject.Infrastructure.Repositories
             using(var connection = _context.CreateConnection())
             {
                 var userParams = new {UserIdParam = userId};
-                int rowsAffected = await connection.ExecuteAsync("ForumAppSchema.spUser_Delete", userParams
-                                            , commandType: CommandType.StoredProcedure);
+                int rowsAffected = await connection.ExecuteAsync("ForumAppSchema.spUser_Delete"
+                                        , userParams
+                                        , commandType: CommandType.StoredProcedure);
                 return rowsAffected > 0;
             }
         }
@@ -54,9 +56,9 @@ namespace ForumProject.Infrastructure.Repositories
             using(var connection = _context.CreateConnection())
             {
                 User? user = await connection.QuerySingleAsync<User>(
-                                            "ForumAppSchema.spUser_Get"
-                                            , new {Email = email}
-                                            , commandType: CommandType.StoredProcedure);
+                                        "ForumAppSchema.spUser_Get"
+                                        , new {Email = email}
+                                        , commandType: CommandType.StoredProcedure);
                 return user;
             }
         }
@@ -66,9 +68,9 @@ namespace ForumProject.Infrastructure.Repositories
             using(var connection = _context.CreateConnection())
             {
                 User? user = await connection.QuerySingleAsync<User>(
-                                            "ForumAppSchema.spUser_Get"
-                                            , new {UserId = userId}
-                                            , commandType: CommandType.StoredProcedure);
+                                        "ForumAppSchema.spUser_Get"
+                                        , new {UserId = userId}
+                                        , commandType: CommandType.StoredProcedure);
                 return user;
             }
         }
@@ -78,9 +80,9 @@ namespace ForumProject.Infrastructure.Repositories
             using(var connection = _context.CreateConnection())
             {
                 User? user = await connection.QuerySingleAsync<User>(
-                                            "ForumAppSchema.spUser_Get"
-                                            , new {Username = username}
-                                            , commandType: CommandType.StoredProcedure);
+                                        "ForumAppSchema.spUser_Get"
+                                        , new {Username = username}
+                                        , commandType: CommandType.StoredProcedure);
                 return user;
             }
         }
@@ -94,8 +96,9 @@ namespace ForumProject.Infrastructure.Repositories
                                         Email = user.Email,
                                         IsActive = user.IsActive,
                                         DeactivatedAt = user.DeactivatedAt};
-                int rowsAffected = await connection.ExecuteAsync("ForumAppSchema.spUser_Upsert", userParams
-                                            , commandType: CommandType.StoredProcedure);
+                int rowsAffected = await connection.ExecuteAsync("ForumAppSchema.spUser_Upsert"
+                                        , userParams
+                                        , commandType: CommandType.StoredProcedure);
                 return rowsAffected > 0;
             }
         }

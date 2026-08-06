@@ -16,25 +16,52 @@ namespace ForumProject.Api.Controllers
             _userService = userService;
         }
 
-        [HttpGet("all-users")]
+        [HttpGet("get-all")]
         public async Task<IEnumerable<UserDto>> GetUsers()
         {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
             return await _userService.GetAll();
         }
 
-        [HttpGet("/{userId}/profile")]
+        [HttpGet("get-by-id/{userId}/")]
         public async Task<UserDto> GetUser(int userId)
         {
             //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
             return await _userService.GetByIdAsync(userId);
         }
 
-        [HttpGet("/{userId}/friends")]
+        [HttpGet("get-by-email/{email}/")]
+        public async Task<UserDto> GetUserByEmail(string email)
+        {
+            return await _userService.GetByEmailAsync(email);
+        }
+
+        [HttpGet("get-by-username/{username}/")]
+        public async Task<UserDto> GetUserByUsername(string username)
+        {
+            return await _userService.GetByUsernameAsync(username);
+        }
+
         public async Task<IEnumerable<UserDto>> GetUserFriends(int userId)
         {
             //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
             return await _userService.GetFriendsByIdAsync(userId);
+        }
+
+        [HttpPut("/deactivate-user/{userId}/")]
+        public async Task<IActionResult> DeactivateUser(int userId)
+        {
+            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
+            UpdateUserDto userToDeactivate = new UpdateUserDto
+            {
+                UserId = userId,
+                IsActive = false,
+                DeactivatedAt = DateTime.UtcNow
+            };
+            
+            bool result = await _userService.UpdateUserAsync(userToDeactivate);
+            if(result)
+                return Ok();
+            throw new Exception("Failed to deactivate user!");
         }
 
         [HttpPut("/accept-friend-request")]
