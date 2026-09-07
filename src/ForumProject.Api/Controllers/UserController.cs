@@ -64,9 +64,10 @@ namespace ForumProject.Api.Controllers
             };
             
             bool result = await _userService.UpdateUserAsync(userToActivate);
-            if(result)
-                return Ok();
-            throw new Exception("Failed to deactivate user!");
+            // if(result)
+            //     return Ok();
+            // throw new Exception("Failed to deactivate user!");
+            return Ok();
         }
 
         [HttpPut("/deactivate-user/{userId}/")]
@@ -81,9 +82,10 @@ namespace ForumProject.Api.Controllers
             };
             
             bool result = await _userService.UpdateUserAsync(userToDeactivate);
-            if(result)
-                return Ok();
-            throw new Exception("Failed to deactivate user!");
+            // if(result)
+            //     return Ok();
+            // throw new Exception("Failed to deactivate user!");
+            return Ok();
         }
 
         [HttpPut("/update-email/{userId}/{email}")]
@@ -96,9 +98,10 @@ namespace ForumProject.Api.Controllers
                 Email = email
             };
             bool result = await _userService.UpdateUserAsync(updateEmail);
-            if(result)
-                return Ok();
-            throw new Exception("Failed to update email!");
+            // if(result)
+            //     return Ok();
+            // throw new Exception("Failed to update email!");
+            return Ok();
         }
 
         [HttpPut("/update-username/{userId}/{username}")]
@@ -111,9 +114,10 @@ namespace ForumProject.Api.Controllers
                 Username = username
             };
             bool result = await _userService.UpdateUserAsync(updateUsername);
-            if(result)
-                return Ok();
-            throw new Exception("Failed to update username!");
+            // if(result)
+            //     return Ok();
+            // throw new Exception("Failed to update username!");
+            return Ok();
         }
 
         [HttpPost("/user/{senderId}/send-friend-request/{recipientId}")]
@@ -127,27 +131,30 @@ namespace ForumProject.Api.Controllers
                 Action = "add"
             };
             bool result = await _friendRequestrService.AddAsync(friendRequestDto);
-            if(result)
-                return Ok();
-            throw new Exception("Failed to send friend request!");
+            // if(result)
+            //     return Ok();
+            // throw new Exception("Failed to send friend request!");
+            return Ok();
         }
 
         [HttpPut("/accept-friend-request")]
         public async Task<IActionResult> AcceptFriendRequest(UpdateFriendDto addFriendDto)
         {
             bool result = await _userService.AddFriendAsync(addFriendDto);
-            if(result)
-                return Ok();
-            throw new Exception("Failed to accept friend request!");
+            // if(result)
+            //     return Ok();
+            // throw new Exception("Failed to accept friend request!");
+            return Ok();
         }
 
         [HttpPut("/remove-friend")]
         public async Task<IActionResult> RemoveFriend(UpdateFriendDto removeFriendDto)
         {
             bool result = await _userService.DeleteFriendAsync(removeFriendDto);
-            if(result)
-                return Ok();
-            throw new Exception("Failed to remove friend!");
+            // if(result)
+            //     return Ok();
+            // throw new Exception("Failed to remove friend!");
+            return Ok();
         }
 
         [HttpDelete("/delete/{userId}")]
@@ -155,9 +162,10 @@ namespace ForumProject.Api.Controllers
         {
             //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
             bool result = await _userService.DeleteUserAsync(userId);
-            if(result)
-                return Ok();
-            throw new Exception("Failed to delete user!");
+            // if(result)
+            //     return Ok();
+            // throw new Exception("Failed to delete user!");
+            return Ok();
         }
     }
 }

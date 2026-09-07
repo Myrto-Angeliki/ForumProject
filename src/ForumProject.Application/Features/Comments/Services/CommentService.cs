@@ -1,3 +1,4 @@
+using ForumProject.Application.Common.Exceptions;
 using ForumProject.Application.Features.Comments.DTOs;
 using ForumProject.Application.Features.Comments.Interfaces;
 using ForumProject.Domain.Entities;
@@ -22,6 +23,13 @@ namespace ForumProject.Application.Features.Comments.Services
         public async Task<bool> DeleteAsync(int commentId)
         {
             return await _commentRepository.DeleteAsync(commentId);
+        }
+
+        public async Task<CommentDto> GetById(int commentId)
+        {
+            Comment comment = await _commentRepository.GetByIdAsync(commentId)
+                ?? throw new NotFoundException(nameof(Comment), commentId);
+            return CommentDto.MapFromComment(comment);
         }
 
         public async Task<IEnumerable<CommentDto>> GetByPost(int postId)

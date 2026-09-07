@@ -1,7 +1,9 @@
+using ForumProject.Application.Common.Exceptions;
 using ForumProject.Application.Features.Posts.DTOs;
 using ForumProject.Application.Features.Posts.Interfaces;
 using ForumProject.Application.Features.Posts.Mappers;
 using ForumProject.Domain.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ForumProject.Application.Features.Posts.Services
 {
@@ -31,14 +33,12 @@ namespace ForumProject.Application.Features.Posts.Services
             return PostMapper.MapToPostDtos(posts);
         }
 
-        public async Task<PostDto?> GetByIdAsync(int postId)
+        public async Task<PostDto> GetByIdAsync(int postId)
         {
             Post? post = await _postRepository.GetByIdAsync(postId);
             if(post != null)
-            {
                 return PostMapper.MapToPostDto(post);
-            }
-            return null;
+            throw new NotFoundException(nameof(post), postId);
         }
 
         public async Task<IEnumerable<PostDto>> GetByUserAsync(int userId)

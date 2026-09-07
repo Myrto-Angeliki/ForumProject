@@ -1,4 +1,5 @@
 using AutoMapper;
+using ForumProject.Application.Common.Exceptions;
 using ForumProject.Application.Features.Topics.DTOs;
 using ForumProject.Application.Features.Topics.Interfaces;
 using ForumProject.Domain.Entities;
@@ -48,7 +49,7 @@ namespace ForumProject.Application.Features.Topics.Services
             {
                 return _mapper.Map<TopicDto>(topic);
             }
-            throw new Exception("Topic not found!");
+            throw new NotFoundException(nameof(topic), topicId);
         }
 
         public async Task<IEnumerable<TopicDto>> GetByPostIdAsync(int postId)

@@ -127,11 +127,7 @@ namespace ForumProject.Infrastructure.Repositories
                 senderId
                 , recipientId
             );
-
-            if (friendRequests.Count() <= 1)
-                return friendRequests.ToList().FirstOrDefault();
-            throw new Exception(@"Unexpected behaviour from FriendRequest entity. " +
-                "There cannot be many friend requests for the same user and sender");
+            return friendRequests.ToList().FirstOrDefault();
         }
 
         public async Task<IEnumerable<FriendRequest>> GetByRecipientIdAsync(int recipientId)

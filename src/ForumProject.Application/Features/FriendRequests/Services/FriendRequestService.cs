@@ -1,3 +1,4 @@
+using ForumProject.Application.Common.Exceptions;
 using ForumProject.Application.Features.FriendRequests.DTOs;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
 using ForumProject.Application.Features.Users.Interfaces;
@@ -19,6 +20,16 @@ namespace ForumProject.Application.Features.FriendRequests.Services
 
         public async Task<bool> AddAsync(FriendRequestDto friendRequestDto)
         {
+            var existingFriendRequest = await _friendRequestRepository.GetAsync(
+                friendRequestDto.SenderId, friendRequestDto.RecipientId);
+            if (existingFriendRequest != null)
+            {
+                User recipient = await _userRepository.GetByIdAsync(friendRequestDto.RecipientId)
+                    ?? throw new NotFoundException($"recipient {nameof(User)}", 
+                        friendRequestDto.RecipientId);
+                throw new ConflictException(
+                    $"A a friend request to '{recipient.Username}' already exists");
+            } 
             bool isAnyRowAffected = await _friendRequestRepository.AddAsync(
                 friendRequestDto.SenderId
                 , friendRequestDto.RecipientId);
@@ -66,14 +77,24 @@ namespace ForumProject.Application.Features.FriendRequests.Services
                 , friendRequestDto.RecipientId);
         }
 
+        private async Task<IEnumerable<FriendRequest>> GetByUserId(string option, int userId)
+        {
+            var user = await _userRepository.GetByIdAsync(userId)
+                ?? throw new NotFoundException($"{option} {nameof(User)}", userId);
+
+            if(option == "sender")
+                return await _friendRequestRepository.GetBySenderIdAsync(userId);
+            return await _friendRequestRepository.GetByRecipientIdAsync(userId);
+        }
+
         public async Task<IEnumerable<FriendRequest>> GetByRecipientIdAsync(int recipientId)
         {
-            return await _friendRequestRepository.GetByRecipientIdAsync(recipientId);
+            return await GetByUserId("recipient", recipientId);
         }
 
         public async Task<IEnumerable<FriendRequest>> GetBySenderIdAsync(int senderId)
         {
-            return await _friendRequestRepository.GetBySenderIdAsync(senderId);
+            return await GetByUserId("sender", senderId);
         }
     }
 }

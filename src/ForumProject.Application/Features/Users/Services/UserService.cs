@@ -96,10 +96,9 @@ namespace ForumProject.Application.Features.Users.Services
             else
                 throw new Exception("invalid option: "+option);
             
-            if(user == null)
-                throw new NotFoundException(nameof(User), optionParam);
-                
-            return _mapper.Map<UserDto>(user);
+            if(user != null)
+                return _mapper.Map<UserDto>(user);
+            throw new NotFoundException(nameof(User), optionParam);
         }
 
         public async Task<UserDto> GetByIdAsync(int userId)

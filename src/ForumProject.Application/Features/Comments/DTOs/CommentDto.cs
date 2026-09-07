@@ -25,6 +25,19 @@ namespace ForumProject.Application.Features.Comments.DTOs
             return comment;
         }
 
+        public static CommentDto MapFromComment (Comment comment)
+        {
+            return new CommentDto
+            {
+                CommentId = comment.CommentId,
+                PostId = comment.PostId,
+                UserId = comment.UserId,
+                Content = comment.Content,
+                CreatedAt = comment.CreatedAt,
+                UpdatedAt = comment.UpdatedAt
+            };
+        } 
+
         public static IEnumerable<CommentDto> Map(IEnumerable<Comment> comments)
         {
             List<CommentDto> commentDtos = new List<CommentDto>();

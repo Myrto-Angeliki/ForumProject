@@ -1,3 +1,4 @@
+using ForumProject.Application.Common.Exceptions;
 using ForumProject.Application.Features.Auths.DTOs;
 using ForumProject.Application.Features.Auths.Interfaces;
 using ForumProject.Application.Features.Users.Interfaces;
@@ -54,9 +55,9 @@ namespace ForumProject.Application.Features.Auths.Services
                         {"token", _authHelperService.CreateToken(loggedInUser.UserId)}
                     };
                 }
-                throw new Exception("User not found with email: " + userForLogin.Email);
+                throw new NotFoundException(nameof(loggedInUser), userForLogin.Email);
             }
-            throw new Exception("Authenticated User not found with email: " + userForLogin.Email);
+            throw new NotFoundException(nameof(userForConfirmation), userForLogin.Email);
         }
 
         public async Task<bool> RegisterUserAsync(RegistrationDto registrationDto)
@@ -84,7 +85,7 @@ namespace ForumProject.Application.Features.Auths.Services
                     }
                     throw new Exception("Failed to register user.");
                 }
-                throw new Exception("User already exists!");
+                throw new ConflictException("Authenticated user", "Email", registrationDto.Email);
             }
             throw new Exception("Passwords do not match!");
         }

@@ -27,10 +27,6 @@ namespace ForumProject.Api.Controllers
         public async Task<PostDto?> GetPost(int postId)
         {
             var response = await _postService.GetByIdAsync(postId);
-            if(response == null)
-            {
-                throw new Exception("There is no post with id = " + postId.ToString());
-            }
             return response;
         }
 
@@ -52,24 +48,14 @@ namespace ForumProject.Api.Controllers
         public async Task<IActionResult> AddPost(PostDto postDto)
         {
             bool isAnyRowAffected = await _postService.AddAsync(postDto);
-            
-            if(isAnyRowAffected)
-            {
-                return Ok();
-            }
-            throw new Exception("Failed to Add Post!");
+            return Ok();
         }
 
         [HttpPut("user/edit-post")]
         public async Task<IActionResult> EditPost(PostDto postDto)
         {
             bool isAnyRowAffected = await _postService.UpdateAsync(postDto);
-
-            if(isAnyRowAffected)
-            {
-                return Ok();
-            }
-            throw new Exception("Failed to Update Post!");
+            return Ok();
         }
 
         [HttpDelete("user/post-id={postId}")]
@@ -80,7 +66,7 @@ namespace ForumProject.Api.Controllers
             {
                 return Ok();
             }
-            return NotFound();
+            return NotFound(postId);
         }
     }
 }

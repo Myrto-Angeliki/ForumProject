@@ -22,9 +22,7 @@ namespace ForumProject.Api.Controllers
         public async Task<IActionResult> Register(RegistrationDto registrationDto)
         {
             bool isAnyRowChanged = await _authService.RegisterUserAsync(registrationDto);
-            if(isAnyRowChanged)
-                return Ok();
-            throw new Exception("Failed to register user!");
+            return Ok();
         }
 
         //[AllowAnonymous]
@@ -39,9 +37,7 @@ namespace ForumProject.Api.Controllers
         public async Task<IActionResult> ChangePasswword(LoginDto userForPasswordChange)
         {
             bool isAnyRowChanged = await _authService.ChangePasswordAsync(userForPasswordChange);
-            if(isAnyRowChanged)
-                return Ok();
-            throw new Exception("Failed to change password!");
+            return Ok();
         }
     }
 }

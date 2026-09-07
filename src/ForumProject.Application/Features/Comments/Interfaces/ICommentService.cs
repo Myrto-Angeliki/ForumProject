@@ -5,6 +5,7 @@ namespace ForumProject.Application.Features.Comments.Interfaces
 {
     public interface ICommentService
     {
+        Task<CommentDto> GetById(int commentId);
         Task<IEnumerable<CommentDto>> GetByUser(int userId);
         Task<IEnumerable<CommentDto>> GetByPost(int postId);
         Task<bool> AddAsync(CommentDto commentDto);

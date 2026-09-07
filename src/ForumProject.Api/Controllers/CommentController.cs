@@ -41,11 +41,7 @@ namespace ForumProject.Api.Controllers
             {
                 isAnyRowAffected = await _commentService.AddAsync(commentDto);
             }
-            if(isAnyRowAffected)
-            {
-                return Ok();
-            }
-            throw new Exception("Failed to Upsert Comment!");
+            return Ok();
         }
 
         [HttpDelete("user/comment-id={commentId}")]
