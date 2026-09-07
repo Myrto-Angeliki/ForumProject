@@ -1,24 +1,30 @@
+using AutoMapper;
 using ForumProject.Application.Common.Exceptions;
 using ForumProject.Application.Features.Posts.DTOs;
 using ForumProject.Application.Features.Posts.Interfaces;
-using ForumProject.Application.Features.Posts.Mappers;
 using ForumProject.Domain.Entities;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ForumProject.Application.Features.Posts.Services
 {
     public class PostService : IPostService
     {
         private readonly IPostRepository _postRepository;
+        private readonly IMapper _mapper;
 
         public  PostService(IPostRepository postRepository)
         {
             _postRepository = postRepository;
+            _mapper = new Mapper(new MapperConfiguration((cfg) =>
+            {
+                cfg.CreateMap<Post, PostDto>();
+                cfg.CreateMap<PostDto, Post>();
+            }));
         }
 
         public async Task<bool> AddAsync(PostDto postDto)
         {
-            Post post = PostServiceHelper.GetPostToUpsert(postDto, isInsert: true);
+            Post post = _mapper.Map<Post>(postDto);
+            PostServiceHelper.GetPostToUpsert(post, isInsert: true);
             return await _postRepository.AddAsync(post);
         }
 
@@ -30,26 +36,27 @@ namespace ForumProject.Application.Features.Posts.Services
         public async Task<IEnumerable<PostDto>> GetAllAsync()
         {
             IEnumerable<Post> posts = await _postRepository.GetAllAsync();
-            return PostMapper.MapToPostDtos(posts);
+            return posts.Select(_mapper.Map<Post, PostDto>);
         }
 
         public async Task<PostDto> GetByIdAsync(int postId)
         {
             Post? post = await _postRepository.GetByIdAsync(postId);
             if(post != null)
-                return PostMapper.MapToPostDto(post);
+                return _mapper.Map<PostDto>(post);
             throw new NotFoundException(nameof(post), postId);
         }
 
         public async Task<IEnumerable<PostDto>> GetByUserAsync(int userId)
         {
             IEnumerable<Post> posts = await _postRepository.GetByUserAsync(userId);
-            return PostMapper.MapToPostDtos(posts);
+            return posts.Select(_mapper.Map<Post, PostDto>);
         }
 
         public async Task<bool> UpdateAsync(PostDto postDto)
         {
-            Post post = PostServiceHelper.GetPostToUpsert(postDto, isInsert: false);
+            Post post = _mapper.Map<Post>(postDto);
+            PostServiceHelper.GetPostToUpsert(post, isInsert: false);
             return await _postRepository.UpdateAsync(post);
         }
     }
