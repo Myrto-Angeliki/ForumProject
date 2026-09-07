@@ -19,11 +19,9 @@ namespace ForumProject.Application.Features.FriendRequests.Services
 
         public async Task<bool> AddAsync(FriendRequestDto friendRequestDto)
         {
-            
             bool isAnyRowAffected = await _friendRequestRepository.AddAsync(
                 friendRequestDto.SenderId
                 , friendRequestDto.RecipientId);
-
 
             return isAnyRowAffected;
         }
@@ -33,7 +31,6 @@ namespace ForumProject.Application.Features.FriendRequests.Services
             bool isAnyRowAffected = await _friendRequestRepository.DeleteAsync(
                 friendRequestDto.SenderId
                 , friendRequestDto.RecipientId);
-
 
             return isAnyRowAffected;
         }

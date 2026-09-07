@@ -1,3 +1,5 @@
+using ForumProject.Application.Features.FriendRequests.DTOs;
+using ForumProject.Application.Features.FriendRequests.Interfaces;
 using ForumProject.Application.Features.Users.DTOs;
 using ForumProject.Application.Features.Users.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -10,10 +12,12 @@ namespace ForumProject.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IFriendRequestService _friendRequestrService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IFriendRequestService friendRequestrService)
         {
             _userService = userService;
+            _friendRequestrService = friendRequestrService;
         }
 
         [HttpGet("get-all")]
@@ -110,6 +114,22 @@ namespace ForumProject.Api.Controllers
             if(result)
                 return Ok();
             throw new Exception("Failed to update username!");
+        }
+
+        [HttpPost("/user/{senderId}/send-friend-request/{recipientId}")]
+        public async Task<IActionResult> AcceptFriendRequest(int senderId, int recipientId)
+        {
+            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
+            FriendRequestDto friendRequestDto = new FriendRequestDto
+            {
+                SenderId = senderId,
+                RecipientId = recipientId,
+                Action = "add"
+            };
+            bool result = await _friendRequestrService.AddAsync(friendRequestDto);
+            if(result)
+                return Ok();
+            throw new Exception("Failed to send friend request!");
         }
 
         [HttpPut("/accept-friend-request")]

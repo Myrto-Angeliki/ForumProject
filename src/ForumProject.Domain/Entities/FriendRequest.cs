@@ -7,14 +7,17 @@ namespace ForumProject.Domain.Entities
         public User Sender { get; set; }
         public User Recipient { get; set; }
 
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
 
 
-        public FriendRequest(User sender, User recipient)
+        public FriendRequest(User sender, User recipient, 
+            DateTime? updatedAt = null)
         {
             Sender = sender;
             Recipient = recipient;
+            CreatedAt = DateTime.UtcNow;
+            UpdatedAt = updatedAt;
         }
 
         // public void UpdateUserFriendRequestLists(string action)

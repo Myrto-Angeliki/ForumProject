@@ -3,26 +3,33 @@ using Dapper;
 using ForumProject.Domain.Entities;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
 using ForumProject.Infrastructure.Persistence;
-using Microsoft.VisualBasic;
+using ForumProject.Application.Features.Users.DTOs;
+using AutoMapper;
+using ForumProject.Application.Features.FriendRequests.DTOs;
 
 namespace ForumProject.Infrastructure.Repositories
 {
     public class FriendRequestRepository : IFriendRequestRepository
     {
         private readonly DataContextDapper _context;
+        private readonly IMapper _mapper;
 
         public FriendRequestRepository(DataContextDapper context)
         {
             _context = context;
+            _mapper = new Mapper(new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<UserDto, User>();
+            }));
         }
 
         public async Task<bool> AddAsync(int senderId, int recipientId)
         {
-            using(var connection = _context.CreateConnection())
+            using (var connection = _context.CreateConnection())
             {
                 var rowsAffected = await connection.ExecuteAsync(
                                     "ForumAppSchema.spFriendRequest_Insert"
-                                    , new {SenderId = senderId, RecipientId = recipientId}
+                                    , new { SenderId = senderId, RecipientId = recipientId }
                                     , commandType: CommandType.StoredProcedure
                 );
                 return rowsAffected > 0;
@@ -31,11 +38,11 @@ namespace ForumProject.Infrastructure.Repositories
 
         private async Task<bool> ExecuteDelete(int? senderId = null, int? recipientId = null)
         {
-            using(var connection = _context.CreateConnection())
+            using (var connection = _context.CreateConnection())
             {
                 var rowsAffected = await connection.ExecuteAsync(
                                     "ForumAppSchema.spFriendRequest_Delete"
-                                    , new {SenderId = senderId, RecipientId = recipientId}
+                                    , new { SenderId = senderId, RecipientId = recipientId }
                                     , commandType: CommandType.StoredProcedure
                 );
                 return rowsAffected > 0;
@@ -58,26 +65,54 @@ namespace ForumProject.Infrastructure.Repositories
         }
 
         private async Task<IEnumerable<FriendRequest>> ExecuteGetQuery(
-            int? senderId = null, int? recipientId = null)
+            int? senderId = null,
+            int? recipientId = null)
         {
-            using(var connection = _context.CreateConnection())
-            {
-                IEnumerable<FriendRequest> friendRequests = await connection
-                        .QueryAsync<FriendRequest, User, User, FriendRequest>(
-                        "ForumAppSchema.spFriendRequest_Get"
-                        , (friendRequestRetrieved, sender, recipient) =>
-                        {
-                            friendRequestRetrieved.Sender = sender;
-                            friendRequestRetrieved.Recipient = recipient;
-                            return friendRequestRetrieved;
+            using var connection = _context.CreateConnection();
 
-                        }
-                        , new {SenderId = senderId, RecipientId = recipientId}
-                        , splitOn: "SenderUId, RecipientUId"
-                        , commandType: CommandType.StoredProcedure
-                    );
-                return friendRequests;
+            var requests = await connection.QueryAsync<FriendRequestQueryDto>(
+                "ForumAppSchema.spFriendRequest_Get",
+                new
+                {
+                    SenderId = senderId,
+                    RecipientId = recipientId
+                },
+                commandType: CommandType.StoredProcedure
+            );
+
+            Console.WriteLine($"Argument Sender: {senderId}");
+            Console.WriteLine($"Argument Recipient: {(recipientId != null ? recipientId : "null")}");
+            foreach (var row in requests)
+            {
+                Console.WriteLine($"Sender: {row.SenderId}");
+                Console.WriteLine($"Recipient: {row.RecipientId}");
             }
+
+            return requests.Select(x =>
+                new FriendRequest(
+                    new User
+                    {
+                        UserId = x.SenderId,
+                        Username = x.SenderUsername,
+                        Email = x.SenderEmail,
+                        IsActive = x.SenderIsActive,
+                        CreatedAt = x.SenderCreatedAt,
+                        UpdatedAt = x.SenderUpdatedAt,
+                        DeactivatedAt = x.SenderDeactivatedAt
+                    },
+                    new User
+                    {
+                        UserId = x.RecipientId,
+                        Username = x.RecipientUsername,
+                        Email = x.RecipientEmail,
+                        IsActive = x.RecipientIsActive,
+                        CreatedAt = x.RecipientCreatedAt,
+                        UpdatedAt = x.RecipientUpdatedAt,
+                        DeactivatedAt = x.RecipientDeactivatedAt
+                    },
+                    x.FriendRequestUpdatedAt
+                )
+            );
         }
 
         public async Task<IEnumerable<FriendRequest>> GetAllAsync()
@@ -86,8 +121,6 @@ namespace ForumProject.Infrastructure.Repositories
             return allFriendRequests;
         }
 
-        
-
         public async Task<FriendRequest?> GetAsync(int senderId, int recipientId)
         {
             IEnumerable<FriendRequest> friendRequests = await ExecuteGetQuery(
@@ -95,26 +128,26 @@ namespace ForumProject.Infrastructure.Repositories
                 , recipientId
             );
 
-            if(friendRequests.Count() <= 1)
+            if (friendRequests.Count() <= 1)
                 return friendRequests.ToList().FirstOrDefault();
-            throw new Exception(@"Unexpected behaviour from FriendRequest entity. "+
+            throw new Exception(@"Unexpected behaviour from FriendRequest entity. " +
                 "There cannot be many friend requests for the same user and sender");
         }
 
         public async Task<IEnumerable<FriendRequest>> GetByRecipientIdAsync(int recipientId)
         {
-                IEnumerable<FriendRequest> recipientFriendRquests = await ExecuteGetQuery(
-                    recipientId: recipientId
-                );
-                return recipientFriendRquests;
+            IEnumerable<FriendRequest> recipientFriendRquests = await ExecuteGetQuery(
+                recipientId: recipientId
+            );
+            return recipientFriendRquests;
         }
 
         public async Task<IEnumerable<FriendRequest>> GetBySenderIdAsync(int senderId)
         {
-                IEnumerable<FriendRequest> senderFriendRquests = await ExecuteGetQuery(
-                    senderId: senderId
-                );
-                return senderFriendRquests;
+            IEnumerable<FriendRequest> senderFriendRquests = await ExecuteGetQuery(
+                senderId: senderId
+            );
+            return senderFriendRquests;
         }
     }
 }
