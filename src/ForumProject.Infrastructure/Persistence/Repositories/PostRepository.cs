@@ -55,7 +55,7 @@ namespace ForumProject.Infrastructure.Repositories
         {
             using(var connection = _context.CreateConnection())
             {
-                Post? post = await connection.QuerySingleAsync<Post>(
+                Post? post = await connection.QuerySingleOrDefaultAsync<Post>(
                                             "ForumAppSchema.spPost_Get"
                                             , new {PostId = postId}
                                             , commandType: CommandType.StoredProcedure);

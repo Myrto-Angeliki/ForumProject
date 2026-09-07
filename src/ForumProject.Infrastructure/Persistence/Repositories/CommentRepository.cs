@@ -54,7 +54,7 @@ namespace ForumProject.Infrastructure.Repositories
         {
             using(var connection = _context.CreateConnection())
             {
-                Comment? comment = await connection.QuerySingleAsync<Comment>(
+                Comment? comment = await connection.QuerySingleOrDefaultAsync<Comment>(
                                             "ForumAppSchema.spComment_Get"
                                             , new {CommentId = commentId}
                                             , commandType: CommandType.StoredProcedure);
