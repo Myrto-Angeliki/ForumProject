@@ -55,7 +55,7 @@ namespace ForumProject.Infrastructure.Repositories
         {
             using(var connection = _context.CreateConnection())
             {
-                User? user = await connection.QuerySingleAsync<User>(
+                User? user = await connection.QuerySingleOrDefaultAsync<User>(
                                         "ForumAppSchema.spUser_Get"
                                         , new {Email = email}
                                         , commandType: CommandType.StoredProcedure);
@@ -67,7 +67,7 @@ namespace ForumProject.Infrastructure.Repositories
         {
             using(var connection = _context.CreateConnection())
             {
-                User? user = await connection.QuerySingleAsync<User>(
+                User? user = await connection.QuerySingleOrDefaultAsync<User>(
                                         "ForumAppSchema.spUser_Get"
                                         , new {UserId = userId}
                                         , commandType: CommandType.StoredProcedure);
@@ -79,7 +79,7 @@ namespace ForumProject.Infrastructure.Repositories
         {
             using(var connection = _context.CreateConnection())
             {
-                User? user = await connection.QuerySingleAsync<User>(
+                User? user = await connection.QuerySingleOrDefaultAsync<User>(
                                         "ForumAppSchema.spUser_Get"
                                         , new {Username = username}
                                         , commandType: CommandType.StoredProcedure);
