@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Drawing;
 using AutoMapper;
 using ForumProject.Application.Common.Exceptions;
@@ -33,9 +34,9 @@ namespace ForumProject.Application.Features.Users.Services
             }));
         }
 
-        private async Task<bool> UpdateFriendship(UpdateFriendDto updateFriendDto)
+        private async Task<bool> UpdateFriendship(string action, UpdateFriendDto updateFriendDto)
         {
-            if(updateFriendDto.Action == "add")
+            if(action == "add")
                 return await _friendshipRepository.AddAsync(updateFriendDto.UserId
                     , updateFriendDto.FriendId);
             else
@@ -45,8 +46,7 @@ namespace ForumProject.Application.Features.Users.Services
 
         public async Task<bool> AddFriendAsync(UpdateFriendDto addFriendDto)
         {
-            addFriendDto.Action = "add";
-            bool isAnyRowAffected1 = await UpdateFriendship(addFriendDto);
+            bool isAnyRowAffected1 = await UpdateFriendship("add", addFriendDto);
 
             FriendRequestDto friendRequestDto = _mapper.Map<FriendRequestDto>(addFriendDto);
             friendRequestDto.Action = "remove";
@@ -57,8 +57,7 @@ namespace ForumProject.Application.Features.Users.Services
 
         public async Task<bool> DeleteFriendAsync(UpdateFriendDto removeFriendDto)
         {
-            removeFriendDto.Action = "remove";
-            return await UpdateFriendship(removeFriendDto);
+            return await UpdateFriendship("remove", removeFriendDto);
         }
 
         public async Task<bool> DeleteUserAsync(int userId)
@@ -94,7 +93,7 @@ namespace ForumProject.Application.Features.Users.Services
             else if(option == "username")
                 user = await _userRepository.GetByUsernameAsync(optionParam);
             else
-                throw new Exception("invalid option: "+option);
+                throw new InvalidOptionException("invalid option: get user by "+option);
             
             if(user != null)
                 return _mapper.Map<UserDto>(user);

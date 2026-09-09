@@ -4,6 +4,5 @@ namespace ForumProject.Application.Features.Users.DTOs
     {
         public int UserId { get; set; }
         public int FriendId { get; set; }
-        public string Action { get; set; } = "";
     }
 }
