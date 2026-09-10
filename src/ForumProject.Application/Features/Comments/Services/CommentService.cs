@@ -18,10 +18,11 @@ namespace ForumProject.Application.Features.Comments.Services
             {
                 cfg.CreateMap<CommentDto, Comment>();
                 cfg.CreateMap<Comment, CommentDto>();
+                cfg.CreateMap<AddCommentDto, Comment>();
             }));
         }
 
-        public async Task<bool> AddAsync(CommentDto commentDto)
+        public async Task<bool> AddAsync(AddCommentDto commentDto)
         {
             return await _commentRepository.AddAsync(_mapper.Map<Comment>(commentDto));
         }

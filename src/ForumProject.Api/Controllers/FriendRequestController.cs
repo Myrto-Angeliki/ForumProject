@@ -1,4 +1,4 @@
-using ForumProject.Application.Features.FriendRequests.DTOs;
+using System.Security.Claims;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
 using ForumProject.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ForumProject.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
-    [Route("/friend-requests")]
+    [Route("api/friend-requests")]
     public class FriendRequestController : ControllerBase
     {
         private readonly IFriendRequestService _friendRequestService;
@@ -18,25 +18,22 @@ namespace ForumProject.Api.Controllers
             _friendRequestService = friendRequestService;
         }
 
-        // [HttpGet("get-all/")]
-        // public async Task<IEnumerable<FriendRequestDto>> GetAllFriendRequests()
-        // {
-        //     //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-        //     return await _friendRequestService.GetAsync(new FriendRequestDto());
-        // }
+        private int CurrentUserId =>
+            int.TryParse(this.User.FindFirst("userId")?.Value 
+                ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var id) ? id : 0;
 
-        [HttpGet("get-requests-sent/{userId}/")]
-        public async Task<IEnumerable<FriendRequest>> GetFriendRequestsSent(int userId)
+        [HttpGet("requests-sent")]
+        public async Task<ActionResult<IEnumerable<FriendRequest>>> GetFriendRequestsSent()
         {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-            return await _friendRequestService.GetBySenderIdAsync(userId);
+            var requestsSent = await _friendRequestService.GetBySenderIdAsync(CurrentUserId);
+            return Ok(requestsSent);
         }
 
-        [HttpGet("get-requests-received/{userId}/")]
-        public async Task<IEnumerable<FriendRequest>> GetFriendRequestsReceived(int userId)
+        [HttpGet("requests-received")]
+        public async Task<ActionResult<IEnumerable<FriendRequest>>> GetFriendRequestsReceived()
         {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-            return await _friendRequestService.GetByRecipientIdAsync(userId);
+            var requestsReceived = await _friendRequestService.GetByRecipientIdAsync(CurrentUserId);
+            return Ok(requestsReceived);
         }
     }
 }

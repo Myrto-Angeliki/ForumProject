@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ForumProject.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
-    [Route("/")]
+    [Route("api/auth")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
@@ -17,7 +17,7 @@ namespace ForumProject.Api.Controllers
             _authService = authService;
         }
 
-        //[AllowAnonymous]
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegistrationDto registrationDto)
         {
@@ -25,7 +25,7 @@ namespace ForumProject.Api.Controllers
             return Ok();
         }
 
-        //[AllowAnonymous]
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto userForLogin)
         {
@@ -33,7 +33,7 @@ namespace ForumProject.Api.Controllers
             return Ok(dict);
         }
 
-        [HttpPut("change-password")]
+        [HttpPut("password")]
         public async Task<IActionResult> ChangePasswword(LoginDto userForPasswordChange)
         {
             bool isAnyRowChanged = await _authService.ChangePasswordAsync(userForPasswordChange);

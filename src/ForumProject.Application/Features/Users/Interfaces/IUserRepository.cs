@@ -10,7 +10,9 @@ namespace ForumProject.Application.Features.Users.Interfaces
         Task<User?> GetByUsernameAsync(string username);
 
         Task<bool> AddAsync(User user);
-        Task<bool> UpdateAsync(User user);
+        Task<bool> UpdateStatusAsync(User user);
+        Task<bool> UpdateEmailAsync(User user);
+        Task<bool> UpdateUsernameAsync(User user);
         Task<bool> DeleteAsync(int userId);
     }
 }

@@ -1,11 +1,13 @@
 using ForumProject.Application.Features.Comments.DTOs;
 using ForumProject.Application.Features.Comments.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumProject.Api.Controllers
 {
+    [Authorize]
     [ApiController]
-    [Route("/")]
+    [Route("api/comments")]
     public class CommentController : ControllerBase
     {
         private readonly ICommentService _commentService;
@@ -15,13 +17,14 @@ namespace ForumProject.Api.Controllers
             _commentService = commentService;
         }
 
-        [HttpGet("posts/post-id={postId}/comments")]
-        public async Task<IEnumerable<CommentDto>> GetComments(int postId = 0)
+        [AllowAnonymous]
+        [HttpGet("by-post/{postId:int}")]
+        public async Task<IEnumerable<CommentDto>> GetComments(int postId)
         {
             return await _commentService.GetByPost(postId);
         }
 
-        [HttpGet("user/my-comments")]
+        [HttpGet("me")]
         public async Task<IEnumerable<CommentDto>> GetMyComments()
         {
             int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
@@ -29,29 +32,26 @@ namespace ForumProject.Api.Controllers
             return await _commentService.GetByUser(userId);
         }
 
-        [HttpPut("user/upsert-comment")]
-        public async Task<IActionResult> UpsertComment(CommentDto commentDto)
+        [HttpPost()]
+        public async Task<IActionResult> UpsertComment(AddCommentDto dto)
         {
-            bool isAnyRowAffected;
-            if(commentDto.CommentId != 0)
-            {
-                isAnyRowAffected = await _commentService.UpdateAsync(commentDto);
-            }
-            else
-            {
-                isAnyRowAffected = await _commentService.AddAsync(commentDto);
-            }
+            bool isAnyRowAffected = await _commentService.AddAsync(dto);
             return Ok();
         }
 
-        [HttpDelete("user/comment-id={commentId}")]
+        [HttpPut()]
+        public async Task<IActionResult> UpsertComment(CommentDto commentDto)
+        {
+            bool isAnyRowAffected = await _commentService.UpdateAsync(commentDto);
+            return Ok();
+        }
+
+        [HttpDelete("{commentId}")]
         public async Task<IActionResult> DeleteComment(int commentId)
         {
             bool isAnyRowAffected = await _commentService.DeleteAsync(commentId);
             if(isAnyRowAffected)
-            {
                 return Ok();
-            }
             return NotFound();
         }
     }

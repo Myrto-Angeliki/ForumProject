@@ -87,20 +87,37 @@ namespace ForumProject.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> UpdateAsync(User user)
+        private async Task<bool> ExecuteUpsert(object userParams)
         {
             using(var connection = _context.CreateConnection())
             {
-                var userParams = new {  UserId = user.UserId,
-                                        Username = user.Username,
-                                        Email = user.Email,
-                                        IsActive = user.IsActive,
-                                        DeactivatedAt = user.DeactivatedAt};
-                int rowsAffected = await connection.ExecuteAsync("ForumAppSchema.spUser_Upsert"
+                return (await connection.ExecuteAsync("ForumAppSchema.spUser_Upsert"
                                         , userParams
-                                        , commandType: CommandType.StoredProcedure);
-                return rowsAffected > 0;
-            }
+                                        , commandType: CommandType.StoredProcedure)
+                ) > 0;
+            } 
+        }
+
+        public async Task<bool> UpdateStatusAsync(User user)
+        {
+            var userParams = new {  UserId = user.UserId,
+                                    IsActive = user.IsActive,
+                                    DeactivatedAt = user.DeactivatedAt};
+            return await ExecuteUpsert(userParams);
+        }
+
+        public async Task<bool> UpdateEmailAsync(User user)
+        {
+            var userParams = new {  UserId = user.UserId,
+                                    Email = user.Email};
+            return await ExecuteUpsert(userParams);
+        }
+
+        public async Task<bool> UpdateUsernameAsync(User user)
+        {
+            var userParams = new {  UserId = user.UserId,
+                                    Username = user.Username};
+            return await ExecuteUpsert(userParams);
         }
     }
 }

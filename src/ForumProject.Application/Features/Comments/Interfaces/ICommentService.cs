@@ -8,7 +8,7 @@ namespace ForumProject.Application.Features.Comments.Interfaces
         Task<CommentDto> GetById(int commentId);
         Task<IEnumerable<CommentDto>> GetByUser(int userId);
         Task<IEnumerable<CommentDto>> GetByPost(int postId);
-        Task<bool> AddAsync(CommentDto commentDto);
+        Task<bool> AddAsync(AddCommentDto commentDto);
         Task<bool> DeleteAsync(int commentId);
         Task<bool> UpdateAsync(CommentDto commentDto);
     }

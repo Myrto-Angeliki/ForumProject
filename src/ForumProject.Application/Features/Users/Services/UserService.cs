@@ -27,9 +27,10 @@ namespace ForumProject.Application.Features.Users.Services
             _friendRequestService = friendRequestService;
             _mapper = new Mapper(new MapperConfiguration(cfg =>
             {
-                cfg.CreateMap<UpdateUserDto, User>();
+                cfg.CreateMap<UpdateStatusDto, User>();
+                cfg.CreateMap<UpdateEmailDto, User>();
+                cfg.CreateMap<UpdateUsernameDto, User>();
                 cfg.CreateMap<UpdateFriendDto, FriendRequestDto>();
-                cfg.CreateMap<User, UpdateUserDto>();
                 cfg.CreateMap<User, UserDto>();
             }));
         }
@@ -43,16 +44,24 @@ namespace ForumProject.Application.Features.Users.Services
                 return await _friendshipRepository.DeleteAsync(updateFriendDto.UserId
                     , updateFriendDto.FriendId);
         }
-
-        public async Task<bool> AddFriendAsync(UpdateFriendDto addFriendDto)
+        
+        public async Task<bool> AcceptFriendRequestAsync(FriendRequestDto friendRequestDto)
         {
-            bool isAnyRowAffected1 = await UpdateFriendship("add", addFriendDto);
+            UpdateFriendDto addFriendDto = new UpdateFriendDto
+            {
+                UserId = friendRequestDto.RecipientId,
+                FriendId = friendRequestDto.SenderId
+            };
 
-            FriendRequestDto friendRequestDto = _mapper.Map<FriendRequestDto>(addFriendDto);
-            friendRequestDto.Action = "remove";
+            bool isAnyRowAffected1 = await UpdateFriendship("add", addFriendDto);
             bool isAnyRowAffected2 = await _friendRequestService.DeleteAsync(friendRequestDto);
 
             return isAnyRowAffected1 && isAnyRowAffected2;
+        }
+
+        public async Task<bool> DenyFriendRequestAsync(FriendRequestDto friendRequestDto)
+        {
+            return await _friendRequestService.DeleteAsync(friendRequestDto);
         }
 
         public async Task<bool> DeleteFriendAsync(UpdateFriendDto removeFriendDto)
@@ -71,9 +80,30 @@ namespace ForumProject.Application.Features.Users.Services
             return friends.Select(_mapper.Map<User, UserDto>);
         }
 
-        public async Task<bool> UpdateUserAsync(UpdateUserDto userDto)
+        public async Task<bool> UpdateStatusAsync(UpdateStatusDto dto)
         {
-            return await _userRepository.UpdateAsync(_mapper.Map<User>(userDto));
+            User user = _mapper.Map<User>(dto);
+            user.DeactivatedAt = user.IsActive ? null : DateTime.UtcNow;
+            //Console.WriteLine($"userId: {user.UserId}, IsActive: {user.IsActive}, DeactivatedAt: {user.DeactivatedAt}");
+            return await _userRepository.UpdateStatusAsync(user);
+        }
+
+        public async Task<bool> UpdateEmailAsync(UpdateEmailDto dto)
+        {
+            var userWithThatEmailAlreadyExists = await _userRepository
+                                                    .GetByEmailAsync(dto.Email);
+            if(userWithThatEmailAlreadyExists != null)
+                throw new ConflictException(nameof(User), nameof(dto.Email), dto.Email);
+            return await _userRepository.UpdateEmailAsync(_mapper.Map<User>(dto));
+        }
+
+        public async Task<bool> UpdateUsernameAsync(UpdateUsernameDto dto)
+        {
+            var userWithThatUsernameAlreadyExists = await _userRepository
+                                                    .GetByUsernameAsync(dto.Username);
+            if(userWithThatUsernameAlreadyExists != null)
+                throw new ConflictException(nameof(User), nameof(dto.Username), dto.Username);
+            return await _userRepository.UpdateUsernameAsync(_mapper.Map<User>(dto));
         }
 
         public async Task<IEnumerable<UserDto>> GetAll()

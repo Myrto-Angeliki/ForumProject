@@ -1,5 +1,5 @@
+using ForumProject.Application.Features.FriendRequests.DTOs;
 using ForumProject.Application.Features.Users.DTOs;
-using ForumProject.Domain.Entities;
 
 namespace ForumProject.Application.Features.Users.Interfaces
 {
@@ -9,10 +9,13 @@ namespace ForumProject.Application.Features.Users.Interfaces
         Task<UserDto> GetByIdAsync(int userId);
         Task<UserDto> GetByEmailAsync(string email);
         Task<UserDto> GetByUsernameAsync(string username);
-        Task<bool> UpdateUserAsync(UpdateUserDto userDto);
+        Task<bool> UpdateStatusAsync(UpdateStatusDto userDto);
+        Task<bool> UpdateEmailAsync(UpdateEmailDto dto);
+        Task<bool> UpdateUsernameAsync(UpdateUsernameDto userDto);
         Task<bool> DeleteUserAsync(int userId);
         Task<IEnumerable<UserDto>> GetFriendsByIdAsync(int userId);
-        Task<bool> AddFriendAsync(UpdateFriendDto addFriendDto);
+        Task<bool> AcceptFriendRequestAsync(FriendRequestDto friendRequestDto);
+        Task<bool> DenyFriendRequestAsync(FriendRequestDto friendRequestDto);
         Task<bool> DeleteFriendAsync(UpdateFriendDto removeFriendDto);
     }
 }

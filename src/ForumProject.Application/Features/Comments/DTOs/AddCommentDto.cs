@@ -2,9 +2,8 @@ using ForumProject.Domain.Entities;
 
 namespace ForumProject.Application.Features.Comments.DTOs
 {
-    public class CommentDto
+    public class AddCommentDto
     {
-        public int CommentId { get; set; }
         public int PostId { get; set; }
         public int UserId { get; set; }
         public string Content { get; set; } = "";

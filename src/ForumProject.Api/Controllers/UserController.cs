@@ -1,12 +1,15 @@
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Claims;
 using ForumProject.Application.Features.FriendRequests.DTOs;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
 using ForumProject.Application.Features.Users.DTOs;
 using ForumProject.Application.Features.Users.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ForumProject.Api.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [ApiController]
     [Route("api/users")]
     public class UserController : ControllerBase
@@ -20,6 +23,10 @@ namespace ForumProject.Api.Controllers
             _friendRequestrService = friendRequestrService;
         }
 
+        private int CurrentUserId =>
+            int.TryParse(this.User.FindFirst("userId")?.Value 
+                ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var id) ? id : 0;
+
         [HttpGet]
         public async Task<IEnumerable<UserDto>> GetUsers()
         {
@@ -27,145 +34,124 @@ namespace ForumProject.Api.Controllers
         }
 
         [HttpGet("{userId:int}")]
-        public async Task<UserDto> GetUser(int userId)
+        public async Task<ActionResult<UserDto>> GetUser(int userId)
         {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-            return await _userService.GetByIdAsync(userId);
+            var user = await _userService.GetByIdAsync(userId);
+            if(user == null) return NotFound();
+            return Ok(user);
         }
 
-        [HttpGet("by-email/{email}")]
-        public async Task<UserDto> GetUserByEmail(string email)
+        [HttpGet("by-email")]
+        public async Task<ActionResult<UserDto>> GetUserByEmail([FromQuery] string email)
         {
-            return await _userService.GetByEmailAsync(email);
+            var user = await _userService.GetByEmailAsync(email);
+            if(user == null) return NotFound();
+            return Ok(user);
         }
 
-        [HttpGet("get-by-username/{username}/")]
-        public async Task<UserDto> GetUserByUsername(string username)
+        [HttpGet("by-username/{username}/")]
+        public async Task<ActionResult<UserDto>> GetUserByUsername(string username)
         {
-            return await _userService.GetByUsernameAsync(username);
+            var user = await _userService.GetByUsernameAsync(username);
+            if(user == null) return NotFound();
+            return Ok(user);
         }
 
-        [HttpGet("{userId}/friends")]
-        public async Task<IEnumerable<UserDto>> GetUserFriends(int userId)
+        [HttpGet("me/friends")]
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUserFriends()
         {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-            return await _userService.GetFriendsByIdAsync(userId);
+            var friends = await _userService.GetFriendsByIdAsync(CurrentUserId);
+            return Ok(friends);
         }
 
-        [HttpPut("{userId}/status")]
-        public async Task<IActionResult> ActivateUser(int userId)
+        [HttpPatch("me/status")]
+        public async Task<IActionResult> ActivateUser([FromBody] bool isActive)
         {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-            UpdateUserDto userToActivate = new UpdateUserDto
-            {
-                UserId = userId,
-                IsActive = true,
-                DeactivatedAt = null
-            };
-            
-            bool result = await _userService.UpdateUserAsync(userToActivate);
-            // if(result)
-            //     return Ok();
-            // throw new Exception("Failed to deactivate user!");
-            return Ok();
+            var result = await _userService.UpdateStatusAsync(
+                new UpdateStatusDto
+                {
+                    UserId = CurrentUserId,
+                    IsActive = isActive
+                }
+            );
+            return result ? NoContent() : BadRequest("Failed to update status");
         }
 
-        [HttpPut("/deactivate-user/{userId}/")]
-        public async Task<IActionResult> DeactivateUser(int userId)
-        {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-            UpdateUserDto userToDeactivate = new UpdateUserDto
-            {
-                UserId = userId,
-                IsActive = false,
-                DeactivatedAt = DateTime.UtcNow
-            };
-            
-            bool result = await _userService.UpdateUserAsync(userToDeactivate);
-            // if(result)
-            //     return Ok();
-            // throw new Exception("Failed to deactivate user!");
-            return Ok();
+        [HttpPatch("me/email")]
+        public async Task<IActionResult> UpdateEmail([FromBody] UpdateEmailRequest request)
+        {   
+            var result = await _userService.UpdateEmailAsync(
+                new UpdateEmailDto
+                {
+                    UserId = CurrentUserId,
+                    Email = request.email
+                }
+            );
+            return result ? NoContent() : BadRequest("Failed to update email.");
         }
 
-        [HttpPut("/update-email/{userId}/{email}")]
-        public async Task<IActionResult> UpdateEmail(int userId, string email)
+        [HttpPatch("me/username")]
+        public async Task<IActionResult> UpdateUsername([FromBody] UpdateUsernameRequest request)
         {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-            UpdateUserDto updateEmail = new UpdateUserDto
-            {
-                UserId = userId,
-                Email = email
-            };
-            bool result = await _userService.UpdateUserAsync(updateEmail);
-            // if(result)
-            //     return Ok();
-            // throw new Exception("Failed to update email!");
-            return Ok();
+            var result = await _userService.UpdateUsernameAsync(
+                new UpdateUsernameDto
+                {
+                    UserId = CurrentUserId,
+                    Username = request.username
+                }
+            );
+            return result ? NoContent() : BadRequest("Failed to update username.");
         }
 
-        [HttpPut("/update-username/{userId}/{username}")]
-        public async Task<IActionResult> UpdateUsername(int userId, string username)
+        [HttpPost("me/friend-requests/{recipientId:int}")]
+        public async Task<IActionResult> SendFriendRequest(int recipientId)
         {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-            UpdateUserDto updateUsername = new UpdateUserDto
-            {
-                UserId = userId,
-                Username = username
-            };
-            bool result = await _userService.UpdateUserAsync(updateUsername);
-            // if(result)
-            //     return Ok();
-            // throw new Exception("Failed to update username!");
-            return Ok();
+            var result = await _friendRequestrService.AddAsync(
+                new FriendRequestDto
+                {
+                    SenderId = CurrentUserId,
+                    RecipientId = recipientId,
+                    Action = "add"
+                }
+            );
+            return result ? NoContent() : BadRequest("Failed to send friend request.");
         }
 
-        [HttpPost("{senderId:int}/friend-requests/{recipientId:int}")]
-        public async Task<IActionResult> SendFriendRequest(int senderId, int recipientId)
+        [HttpPut("me/friend-requests/{senderId:int}/accept")]
+        public async Task<IActionResult> AcceptFriendRequest(int senderId)
         {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-            FriendRequestDto friendRequestDto = new FriendRequestDto
-            {
-                SenderId = senderId,
-                RecipientId = recipientId,
-                Action = "add"
-            };
-            bool result = await _friendRequestrService.AddAsync(friendRequestDto);
-            // if(result)
-            //     return Ok();
-            // throw new Exception("Failed to send friend request!");
-            return Ok();
+            var result = await _userService.AcceptFriendRequestAsync(
+                new FriendRequestDto
+                {
+                    SenderId = senderId,
+                    RecipientId = CurrentUserId,
+                    Action = "remove"
+                }
+            );
+            return result ? NoContent() : BadRequest("Failed to accept friend request.");
         }
 
-        [HttpPut("accept-friend-request")]
-        public async Task<IActionResult> AcceptFriendRequest(UpdateFriendDto addFriendDto)
+        [HttpDelete("me/friends/{friendId:int}")]
+        public async Task<IActionResult> RemoveFriend(int friendId)
         {
-            bool result = await _userService.AddFriendAsync(addFriendDto);
-            // if(result)
-            //     return Ok();
-            // throw new Exception("Failed to accept friend request!");
-            return Ok();
+            var result = await _userService.DeleteFriendAsync(
+                new UpdateFriendDto
+                {
+                    UserId = CurrentUserId,
+                    FriendId = friendId
+                }
+            );
+            return result ? NoContent() : BadRequest("Failed to remove friend.");
         }
 
-        [HttpPut("remove-friend")]
-        public async Task<IActionResult> RemoveFriend(UpdateFriendDto removeFriendDto)
-        {
-            bool result = await _userService.DeleteFriendAsync(removeFriendDto);
-            // if(result)
-            //     return Ok();
-            // throw new Exception("Failed to remove friend!");
-            return Ok();
-        }
-
-        [HttpDelete("/delete/{userId}")]
+        [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteUser(int userId)
         {
-            //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
-            bool result = await _userService.DeleteUserAsync(userId);
-            // if(result)
-            //     return Ok();
-            // throw new Exception("Failed to delete user!");
-            return Ok();
+            var result = await _userService.DeleteUserAsync(userId);
+            return result ? NoContent() : NotFound();
         }
+
+        public record UpdateEmailRequest(string email);
+        public record UpdateUsernameRequest(string username);
     }
 }
