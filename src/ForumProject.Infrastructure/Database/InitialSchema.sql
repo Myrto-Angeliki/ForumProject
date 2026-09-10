@@ -9,11 +9,18 @@ GO
 CREATE SCHEMA ForumAppSchema;
 GO
 
+CREATE TABLE ForumAppSchema.Auth(
+	Email NVARCHAR(50) PRIMARY KEY,
+	PasswordHash VARBINARY(MAX),
+	PasswordSalt VARBINARY(MAX)
+)
+GO
+
 CREATE TABLE ForumAppSchema.Users
 (
     UserId INT IDENTITY(1,1) PRIMARY KEY,
-    Username NVARCHAR(100) UNIQUE NOT NULL,
-    Email NVARCHAR(200) UNIQUE NOT NULL,
+    Username NVARCHAR(50) UNIQUE NOT NULL,
+    Email NVARCHAR(50) UNIQUE NOT NULL,
     IsActive BIT,
     CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAt DATETIME2 NULL,
@@ -81,7 +88,7 @@ GO
 CREATE TABLE ForumAppSchema.Topics
 (
     TopicId INT IDENTITY(1,1) PRIMARY KEY,
-    TopicName NVARCHAR(200) UNIQUE,
+    TopicName NVARCHAR(50) UNIQUE,
     CreatedAt DATETIME2 NOT NULL DEFAULT SYSUTCDATETIME(),
     UpdatedAt DATETIME2 NULL
 );
@@ -144,6 +151,7 @@ CREATE TABLE ForumAppSchema.FriendRequests
         FOREIGN KEY (RecipientId)
         REFERENCES ForumAppSchema.Users(UserId)
 );
+
 
 CREATE INDEX IX_Posts_UserId
 ON ForumAppSchema.Posts(UserId);

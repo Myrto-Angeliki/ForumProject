@@ -8,7 +8,7 @@ namespace ForumProject.Api.Controllers
 {
     //[Authorize]
     [ApiController]
-    [Route("/user")]
+    [Route("api/users")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -20,20 +20,20 @@ namespace ForumProject.Api.Controllers
             _friendRequestrService = friendRequestrService;
         }
 
-        [HttpGet("get-all")]
+        [HttpGet]
         public async Task<IEnumerable<UserDto>> GetUsers()
         {
             return await _userService.GetAll();
         }
 
-        [HttpGet("get-by-id/{userId}/")]
+        [HttpGet("{userId:int}")]
         public async Task<UserDto> GetUser(int userId)
         {
             //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
             return await _userService.GetByIdAsync(userId);
         }
 
-        [HttpGet("get-by-email/{email}/")]
+        [HttpGet("by-email/{email}")]
         public async Task<UserDto> GetUserByEmail(string email)
         {
             return await _userService.GetByEmailAsync(email);
@@ -45,14 +45,14 @@ namespace ForumProject.Api.Controllers
             return await _userService.GetByUsernameAsync(username);
         }
 
-        [HttpGet("get-friends/{userId}/")]
+        [HttpGet("{userId}/friends")]
         public async Task<IEnumerable<UserDto>> GetUserFriends(int userId)
         {
             //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
             return await _userService.GetFriendsByIdAsync(userId);
         }
 
-        [HttpPut("/activate-user/{userId}/")]
+        [HttpPut("{userId}/status")]
         public async Task<IActionResult> ActivateUser(int userId)
         {
             //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
@@ -120,8 +120,8 @@ namespace ForumProject.Api.Controllers
             return Ok();
         }
 
-        [HttpPost("/user/{senderId}/send-friend-request/{recipientId}")]
-        public async Task<IActionResult> AcceptFriendRequest(int senderId, int recipientId)
+        [HttpPost("{senderId:int}/friend-requests/{recipientId:int}")]
+        public async Task<IActionResult> SendFriendRequest(int senderId, int recipientId)
         {
             //int userId = Int32.Parse(this.User.FindFirst("userId")?.Value ?? "0");
             FriendRequestDto friendRequestDto = new FriendRequestDto
@@ -137,7 +137,7 @@ namespace ForumProject.Api.Controllers
             return Ok();
         }
 
-        [HttpPut("/accept-friend-request")]
+        [HttpPut("accept-friend-request")]
         public async Task<IActionResult> AcceptFriendRequest(UpdateFriendDto addFriendDto)
         {
             bool result = await _userService.AddFriendAsync(addFriendDto);
@@ -147,7 +147,7 @@ namespace ForumProject.Api.Controllers
             return Ok();
         }
 
-        [HttpPut("/remove-friend")]
+        [HttpPut("remove-friend")]
         public async Task<IActionResult> RemoveFriend(UpdateFriendDto removeFriendDto)
         {
             bool result = await _userService.DeleteFriendAsync(removeFriendDto);
