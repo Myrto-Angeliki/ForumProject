@@ -26,12 +26,14 @@ namespace ForumProject.Api.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("login")]
+        [HttpPost("login")]//has to 
         public async Task<IActionResult> Login(LoginDto userForLogin)
         {
             Dictionary<string, string> dict = await _authService.LoginAsync(userForLogin);
             return Ok(dict);
         }
+
+        //refresh token
 
         [HttpPut("password")]
         public async Task<IActionResult> ChangePasswword(LoginDto userForPasswordChange)
