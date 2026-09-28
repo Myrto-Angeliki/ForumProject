@@ -7,7 +7,7 @@ using ForumProject.Application.Features.Users.Services;
 using ForumProject.Domain.Entities;
 using Moq;
 
-namespace ForumProject.Tests.UnitTests;
+namespace ForumProject.Tests.UnitTests.Services;
 
 public class UserServiceTests
 {

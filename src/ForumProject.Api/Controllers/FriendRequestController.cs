@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using ForumProject.Application.Features.FriendRequests.DTOs;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
 using ForumProject.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -22,18 +23,18 @@ namespace ForumProject.Api.Controllers
             int.TryParse(this.User.FindFirst("userId")?.Value 
                 ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var id) ? id : 0;
 
-        // [HttpGet("requests-sent")]
-        // public async Task<ActionResult<IEnumerable<FriendRequest>>> GetFriendRequestsSent()
-        // {
-        //     var requestsSent = await _friendRequestService.GetBySenderIdAsync(CurrentUserId);
-        //     return Ok(requestsSent);
-        // }
-
-        // [HttpGet("requests-received")]
-        // public async Task<ActionResult<IEnumerable<FriendRequest>>> GetFriendRequestsReceived()
-        // {
-        //     var requestsReceived = await _friendRequestService.GetByRecipientIdAsync(CurrentUserId);
-        //     return Ok(requestsReceived);
-        // }
+        [HttpPost("me/{recipientId:int}")]
+        public async Task<IActionResult> SendFriendRequest(int recipientId)
+        {
+            var result = await _friendRequestService.AddAsync(
+                new FriendRequestDto
+                {
+                    SenderId = CurrentUserId,
+                    RecipientId = recipientId,
+                    Action = "add"
+                }
+            );
+            return result ? NoContent() : BadRequest("Failed to send friend request.");
+        }
     }
 }

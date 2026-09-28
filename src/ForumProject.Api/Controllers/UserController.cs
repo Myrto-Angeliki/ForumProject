@@ -15,12 +15,10 @@ namespace ForumProject.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IFriendRequestService _friendRequestrService;
 
-        public UserController(IUserService userService, IFriendRequestService friendRequestrService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _friendRequestrService = friendRequestrService;
         }
 
         private int CurrentUserId =>
@@ -38,7 +36,7 @@ namespace ForumProject.Api.Controllers
         {
             var user = await _userService.GetByIdAsync(userId);
             if(user == null) return NotFound();
-            return Ok(user);
+            return user;
         }
 
         [HttpGet("by-email")]
@@ -103,19 +101,6 @@ namespace ForumProject.Api.Controllers
             return result ? NoContent() : BadRequest("Failed to update username.");
         }
 
-        [HttpPost("me/friend-requests/{recipientId:int}")]
-        public async Task<IActionResult> SendFriendRequest(int recipientId)
-        {
-            var result = await _friendRequestrService.AddAsync(
-                new FriendRequestDto
-                {
-                    SenderId = CurrentUserId,
-                    RecipientId = recipientId,
-                    Action = "add"
-                }
-            );
-            return result ? NoContent() : BadRequest("Failed to send friend request.");
-        }
 
         [HttpPut("me/friend-requests/{senderId:int}/accept")]
         public async Task<IActionResult> AcceptFriendRequest(int senderId)

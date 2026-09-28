@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\ForumProject.Api\ForumProject.Api.csproj" />
     <ProjectReference Include="..\..\src\ForumProject.Application\ForumProject.Application.csproj" />
   </ItemGroup>
 

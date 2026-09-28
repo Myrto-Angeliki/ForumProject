@@ -25,7 +25,7 @@ namespace ForumProject.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegistrationDto registrationDto)
         {
-            bool isAnyRowChanged = await _authService.RegisterUserAsync(registrationDto);
+            var isAnyRowChanged = await _authService.RegisterUserAsync(registrationDto);
             return Ok(isAnyRowChanged);
         }
 
@@ -33,7 +33,7 @@ namespace ForumProject.Api.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginDto userForLogin)
         {
-            Dictionary<string, string> dict = await _authService.LoginAsync(userForLogin);
+            var dict = await _authService.LoginAsync(userForLogin);
             return Ok(dict);
         }
 
@@ -44,15 +44,15 @@ namespace ForumProject.Api.Controllers
             int.TryParse(this.User.FindFirst("userId")?.Value 
                 ?? User.FindFirst(ClaimTypes.NameIdentifier)?.Value, out var id) ? id : 0;
 
-            string token = await _authService.RefreshTokenAsync(currentUserId);
+            var token = await _authService.RefreshTokenAsync(currentUserId);
             return Ok(token);
         }
 
         [HttpPut("password")]
         public async Task<IActionResult> ChangePasswword(LoginDto userForPasswordChange)
         {
-            bool isAnyRowChanged = await _authService.ChangePasswordAsync(userForPasswordChange);
-            return Ok();
+            var isAnyRowChanged = await _authService.ChangePasswordAsync(userForPasswordChange);
+            return Ok(isAnyRowChanged);
         }
     }
 }
