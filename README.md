@@ -32,6 +32,14 @@ Api  ->  Application  ->  Domain
 - Infrastructure implements Application's interfaces (e.g. persistence via SQL Server using Dapper and stored procedures, external integrations).
 - Api wires everything together and exposes the application as a REST API.
 
+
+## Backend Documentation
+| Endpoint           | Method  | Action            |
+| --------           | :------ | ----------------- |
+| /api/auth/register | POST    | Create a new user |
+| /api/auth/login    | POST    | Login an existing user |
+| /api/auth/password | PUT     | Change the password of an authorized user |
+
 ## Prerequisites
 
 - .NET 10 SDK

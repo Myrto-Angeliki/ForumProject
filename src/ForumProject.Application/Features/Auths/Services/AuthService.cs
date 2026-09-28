@@ -1,6 +1,7 @@
 using ForumProject.Application.Common.Exceptions;
 using ForumProject.Application.Features.Auths.DTOs;
 using ForumProject.Application.Features.Auths.Interfaces;
+using ForumProject.Application.Features.Users.DTOs;
 using ForumProject.Application.Features.Users.Interfaces;
 using ForumProject.Domain.Entities;
 
@@ -58,6 +59,13 @@ namespace ForumProject.Application.Features.Auths.Services
                 throw new NotFoundException(nameof(loggedInUser), userForLogin.Email);
             }
             throw new NotFoundException(nameof(userForConfirmation), userForLogin.Email);
+        }
+
+        public async Task<string> RefreshTokenAsync(int userId)
+        {
+            User user = await _userRepository.GetByIdAsync(userId)
+                ?? throw new NotFoundException(nameof(User), userId);
+            return _authHelperService.CreateToken(user.UserId);
         }
 
         public async Task<bool> RegisterUserAsync(RegistrationDto registrationDto)

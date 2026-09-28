@@ -7,6 +7,7 @@ namespace ForumProject.Application.Features.Auths.Interfaces
     {
         Task<bool> RegisterUserAsync(RegistrationDto registrationDto);
         Task<bool> ChangePasswordAsync(LoginDto userForPasswordChange);
+        Task<string> RefreshTokenAsync(int userId);
         Task<Dictionary<string, string>> LoginAsync(LoginDto userForLogin);
     }
 }
