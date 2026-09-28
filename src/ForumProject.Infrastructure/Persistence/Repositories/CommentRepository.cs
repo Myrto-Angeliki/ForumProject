@@ -66,7 +66,7 @@ namespace ForumProject.Infrastructure.Repositories
         {
             using(var connection = _context.CreateConnection())
             {
-                IEnumerable<Comment>? comments = await connection.QueryAsync<Comment>(
+                IEnumerable<Comment> comments = await connection.QueryAsync<Comment>(
                                             "ForumAppSchema.spComment_Get"
                                             , new {PostId = postId}
                                             , commandType: CommandType.StoredProcedure);
@@ -78,7 +78,7 @@ namespace ForumProject.Infrastructure.Repositories
         {
             using(var connection = _context.CreateConnection())
             {
-                IEnumerable<Comment>? comments = await connection.QueryAsync<Comment>(
+                IEnumerable<Comment> comments = await connection.QueryAsync<Comment>(
                                             "ForumAppSchema.spComment_Get"
                                             , new {UserId = userId}
                                             , commandType: CommandType.StoredProcedure);

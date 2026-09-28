@@ -13,6 +13,7 @@ namespace ForumProject.Application.Features.FriendRequests.Interfaces
         Task<bool> DeleteBySenderIdAsync(int senderId);
         Task<bool> DeleteByRecipientIdAsync(int recipientId);
         Task<bool> DeleteByUserId(int userId);
+        Task<bool> AcceptFriendRequestAsync(FriendRequestDto friendRequestDto);
 
     }
 }

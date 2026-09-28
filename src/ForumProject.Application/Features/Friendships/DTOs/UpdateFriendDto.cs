@@ -1,4 +1,4 @@
-namespace ForumProject.Application.Features.Users.DTOs
+namespace ForumProject.Application.Features.Friendships.DTOs
 {
     public class UpdateFriendDto
     {

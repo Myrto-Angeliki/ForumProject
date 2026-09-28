@@ -9,7 +9,7 @@ namespace ForumProject.Application.Features.Posts.Interfaces
         Task<IEnumerable<PostDto>> GetByUserAsync(int userId);
         Task<bool> AddAsync(PostDto postDto);
         Task<bool> UpdateAsync(PostDto postDto);
-        Task<bool> DeleteAsync(int postId);
+        Task<bool> DeleteAsync(PostDto dto);
 
     }
 }

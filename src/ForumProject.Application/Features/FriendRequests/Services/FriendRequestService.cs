@@ -1,6 +1,8 @@
 using ForumProject.Application.Common.Exceptions;
 using ForumProject.Application.Features.FriendRequests.DTOs;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
+using ForumProject.Application.Features.Friendships.DTOs;
+using ForumProject.Application.Features.Friendships.Interfaces;
 using ForumProject.Application.Features.Users.Interfaces;
 using ForumProject.Domain.Entities;
 
@@ -10,12 +12,15 @@ namespace ForumProject.Application.Features.FriendRequests.Services
     {
         private readonly IFriendRequestRepository _friendRequestRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IFriendshipService _friendshipService;
 
         public  FriendRequestService(IFriendRequestRepository friendRequestRepository
-            , IUserRepository userRepository)
+            , IUserRepository userRepository
+            , IFriendshipService friendshipService)
         {
             _friendRequestRepository = friendRequestRepository;
             _userRepository = userRepository;
+            _friendshipService = friendshipService;
         }
 
         public async Task<bool> AddAsync(FriendRequestDto friendRequestDto)
@@ -95,6 +100,20 @@ namespace ForumProject.Application.Features.FriendRequests.Services
         public async Task<IEnumerable<FriendRequest>> GetBySenderIdAsync(int senderId)
         {
             return await GetByUserId("sender", senderId);
+        }
+
+        public async Task<bool> AcceptFriendRequestAsync(FriendRequestDto friendRequestDto)
+        {
+            UpdateFriendDto addFriendDto = new UpdateFriendDto
+            {
+                UserId = friendRequestDto.RecipientId,
+                FriendId = friendRequestDto.SenderId
+            };
+
+            bool isAnyRowAffected1 = await _friendshipService.CreateFriendship(addFriendDto);
+            bool isAnyRowAffected2 = await DeleteAsync(friendRequestDto);
+
+            return isAnyRowAffected1 && isAnyRowAffected2;
         }
     }
 }

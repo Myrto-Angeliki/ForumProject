@@ -24,13 +24,19 @@ namespace ForumProject.Application.Features.Posts.Services
         public async Task<bool> AddAsync(PostDto postDto)
         {
             Post post = _mapper.Map<Post>(postDto);
-            PostServiceHelper.GetPostToUpsert(post, isInsert: true);
+            PostServiceHelper.GetPostToUpsert(post);
             return await _postRepository.AddAsync(post);
         }
 
-        public async Task<bool> DeleteAsync(int postId)
+        public async Task<bool> DeleteAsync(PostDto dto)
         {
-            return await _postRepository.DeleteAsync(postId);
+            var userPosts = await GetByUserAsync(dto.UserId);
+            foreach(PostDto userPost in userPosts)
+            {
+                if(userPost.PostId == dto.PostId)
+                    return await _postRepository.DeleteAsync(dto.PostId);
+            }
+            throw new UnauthorizedAccessException("Cannot delete the post of a different user!");
         }
 
         public async Task<IEnumerable<PostDto>> GetAllAsync()
@@ -56,7 +62,7 @@ namespace ForumProject.Application.Features.Posts.Services
         public async Task<bool> UpdateAsync(PostDto postDto)
         {
             Post post = _mapper.Map<Post>(postDto);
-            PostServiceHelper.GetPostToUpsert(post, isInsert: false);
+            PostServiceHelper.GetPostToUpsert(post);
             return await _postRepository.UpdateAsync(post);
         }
     }

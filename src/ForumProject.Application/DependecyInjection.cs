@@ -4,6 +4,8 @@ using ForumProject.Application.Features.Comments.Interfaces;
 using ForumProject.Application.Features.Comments.Services;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
 using ForumProject.Application.Features.FriendRequests.Services;
+using ForumProject.Application.Features.Friendships.Interfaces;
+using ForumProject.Application.Features.Friendships.Services;
 using ForumProject.Application.Features.Posts.Interfaces;
 using ForumProject.Application.Features.Posts.Services;
 using ForumProject.Application.Features.Users.Interfaces;
@@ -26,6 +28,7 @@ namespace ForumProject.Application
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IFriendRequestService, FriendRequestService>();
+            services.AddScoped<IFriendshipService, FriendshipService>();
 
             return services;
         }

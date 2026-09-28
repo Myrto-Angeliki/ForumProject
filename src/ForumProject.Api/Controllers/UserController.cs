@@ -1,7 +1,6 @@
-using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using ForumProject.Application.Features.FriendRequests.DTOs;
-using ForumProject.Application.Features.FriendRequests.Interfaces;
+using ForumProject.Application.Features.Friendships.DTOs;
 using ForumProject.Application.Features.Users.DTOs;
 using ForumProject.Application.Features.Users.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -63,7 +62,7 @@ namespace ForumProject.Api.Controllers
         }
 
         [HttpPatch("me/status")]
-        public async Task<IActionResult> ActivateUser([FromBody] bool isActive)
+        public async Task<IActionResult> UpdateUserStatus([FromBody] bool isActive)
         {
             var result = await _userService.UpdateStatusAsync(
                 new UpdateStatusDto
@@ -99,21 +98,6 @@ namespace ForumProject.Api.Controllers
                 }
             );
             return result ? NoContent() : BadRequest("Failed to update username.");
-        }
-
-
-        [HttpPut("me/friend-requests/{senderId:int}/accept")]
-        public async Task<IActionResult> AcceptFriendRequest(int senderId)
-        {
-            var result = await _userService.AcceptFriendRequestAsync(
-                new FriendRequestDto
-                {
-                    SenderId = senderId,
-                    RecipientId = CurrentUserId,
-                    Action = "remove"
-                }
-            );
-            return result ? NoContent() : BadRequest("Failed to accept friend request.");
         }
 
         [HttpDelete("me/friends/{friendId:int}")]

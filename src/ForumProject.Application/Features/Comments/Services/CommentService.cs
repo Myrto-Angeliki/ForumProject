@@ -11,7 +11,7 @@ namespace ForumProject.Application.Features.Comments.Services
         private readonly ICommentRepository _commentRepository;
         private readonly IMapper _mapper;
 
-        public  CommentService(ICommentRepository commentRepository)
+        public CommentService(ICommentRepository commentRepository)
         {
             _commentRepository = commentRepository;
             _mapper = new Mapper(new MapperConfiguration((cfg) =>
@@ -27,9 +27,20 @@ namespace ForumProject.Application.Features.Comments.Services
             return await _commentRepository.AddAsync(_mapper.Map<Comment>(commentDto));
         }
 
-        public async Task<bool> DeleteAsync(int commentId)
+        public async Task<bool> DeleteAsync(CommentDto dto, bool fromCurrentUserCommentList = true)
         {
-            return await _commentRepository.DeleteAsync(commentId);
+            var commentsByUser = await _commentRepository.GetByUserAsync(dto.UserId);
+            if (fromCurrentUserCommentList)
+                return await _commentRepository.DeleteAsync(dto.CommentId);
+            else
+            {
+                foreach (Comment comment in commentsByUser)
+                {
+                    if (dto.CommentId == comment.CommentId)
+                        return await _commentRepository.DeleteAsync(dto.CommentId);
+                }
+                throw new UnauthorizedAccessException("Cannot delete the comment of a different user!");
+            }
         }
 
         public async Task<CommentDto> GetById(int commentId)

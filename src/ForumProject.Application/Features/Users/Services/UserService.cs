@@ -4,6 +4,7 @@ using AutoMapper;
 using ForumProject.Application.Common.Exceptions;
 using ForumProject.Application.Features.FriendRequests.DTOs;
 using ForumProject.Application.Features.FriendRequests.Interfaces;
+using ForumProject.Application.Features.Friendships.DTOs;
 using ForumProject.Application.Features.Friendships.Interfaces;
 using ForumProject.Application.Features.Users.DTOs;
 using ForumProject.Application.Features.Users.Interfaces;
@@ -14,16 +15,16 @@ namespace ForumProject.Application.Features.Users.Services
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IFriendshipRepository _friendshipRepository;
+        private readonly IFriendshipService _friendshipService;
         private readonly IFriendRequestService _friendRequestService;
         private readonly IMapper _mapper;
 
         public  UserService(IUserRepository userRepository
-            , IFriendshipRepository friendshipRepository
+            , IFriendshipService friendshipService
             , IFriendRequestService friendRequestService)
         {
             _userRepository = userRepository;
-            _friendshipRepository = friendshipRepository;
+            _friendshipService = friendshipService;
             _friendRequestService = friendRequestService;
             _mapper = new Mapper(new MapperConfiguration(cfg =>
             {
@@ -35,38 +36,9 @@ namespace ForumProject.Application.Features.Users.Services
             }));
         }
 
-        private async Task<bool> UpdateFriendship(string action, UpdateFriendDto updateFriendDto)
-        {
-            if(action == "add")
-                return await _friendshipRepository.AddAsync(updateFriendDto.UserId
-                    , updateFriendDto.FriendId);
-            else
-                return await _friendshipRepository.DeleteAsync(updateFriendDto.UserId
-                    , updateFriendDto.FriendId);
-        }
-        
-        public async Task<bool> AcceptFriendRequestAsync(FriendRequestDto friendRequestDto)
-        {
-            UpdateFriendDto addFriendDto = new UpdateFriendDto
-            {
-                UserId = friendRequestDto.RecipientId,
-                FriendId = friendRequestDto.SenderId
-            };
-
-            bool isAnyRowAffected1 = await UpdateFriendship("add", addFriendDto);
-            bool isAnyRowAffected2 = await _friendRequestService.DeleteAsync(friendRequestDto);
-
-            return isAnyRowAffected1 && isAnyRowAffected2;
-        }
-
-        public async Task<bool> DenyFriendRequestAsync(FriendRequestDto friendRequestDto)
-        {
-            return await _friendRequestService.DeleteAsync(friendRequestDto);
-        }
-
         public async Task<bool> DeleteFriendAsync(UpdateFriendDto removeFriendDto)
         {
-            return await UpdateFriendship("remove", removeFriendDto);
+            return await _friendshipService.DeleteFriendship(removeFriendDto);
         }
 
         public async Task<bool> DeleteUserAsync(int userId)
@@ -76,8 +48,7 @@ namespace ForumProject.Application.Features.Users.Services
 
         public async Task<IEnumerable<UserDto>> GetFriendsByIdAsync(int userId)
         {
-            IEnumerable<User> friends = await _friendshipRepository.GetByUserAsync(userId);
-            return friends.Select(_mapper.Map<User, UserDto>);
+            return await _friendshipService.GetFriendsByIdAsync(userId);
         }
 
         public async Task<bool> UpdateStatusAsync(UpdateStatusDto dto)
